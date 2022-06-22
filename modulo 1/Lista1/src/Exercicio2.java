@@ -25,11 +25,11 @@ public class Exercicio2 {
         double media = (nota1 + nota2 + nota3 + nota4) / 4;
 
         if (media <= 5.0) {
-            System.out.println("Reprovado");
+            System.out.println("Sua média foi " + media + " , você esta Reprovado");
         } else if (media <= 6.9) {
-            System.out.println("em exame");
+            System.out.println("Sua média foi " + media + " , você esta em exame");
         } else {
-            System.out.println("aprovado");
+            System.out.println("Sua média foi " + media + " , você esta aprovado");
         }
     }
 }
