@@ -4,7 +4,7 @@ public class Exercicio04 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int[] numeros = new int[3];
-        int posMenor = 0, con = 999999999;
+        int posMenor = 0, con = Integer.MAX_VALUE;
 
         for (int i = 0; i < numeros.length; i++) {
             System.out.println("Informe o " + (i + 1) + "° numero: ");

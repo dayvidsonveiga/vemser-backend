@@ -21,7 +21,6 @@ public class Exercicio08 {
             alunos[i][3] = (int) (alunos[i][1] * 0.6 + alunos[i][2] * 0.4);
         }
 
-
         for (int i = 0; i < linha; i++) {
             if (alunos[i][3] > maiorNota) {
                 maiorNota = alunos[i][3];
