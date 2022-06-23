@@ -28,20 +28,6 @@ public class ContaCorrente extends Conta implements Impressao {
     }
 
     @Override
-    public Boolean transferir(Conta conta, double valor) {
-        if (this.getSaldo() + this.chequeEspecial >= valor && valor > 0) {
-            this.setSaldo(this.getSaldo() - valor);
-            conta.setSaldo(conta.getSaldo() + valor);
-            System.out.println("Transferência realizado de R$ " + valor + " com sucesso para " + conta.getCliente().getNome() + ".\n Saldo atual: R$ " + this.getSaldo());
-            return true;
-        } else {
-            System.out.println("Não foi possível realizar a transferência de R$ " + valor + ".\n Seu saldo é insuficiente: R$ " + this.getSaldo());
-            return false;
-        }
-
-    }
-
-    @Override
     public void imprimir() {
         System.out.println("Informações da conta: " +
                 "Cliente: " + this.getCliente().getNome() + "\n" +
