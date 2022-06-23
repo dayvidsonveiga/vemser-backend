@@ -16,7 +16,7 @@ public class ContaCorrente extends Conta implements Impressao {
 
     @Override
     public Boolean sacar(double valor) {
-        if (this.getSaldo() + this.chequeEspecial >= valor && valor > 0) {
+        if (this.retornarSaldoComChequeEspecial() >= valor && valor > 0) {
             this.setSaldo(this.getSaldo() - valor);
             System.out.println("Saque efetuado de R$ " + valor + " com sucesso.\n Saldo atual: R$ " + this.getSaldo());
             return true;
