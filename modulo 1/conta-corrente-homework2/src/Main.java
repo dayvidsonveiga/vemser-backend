@@ -41,6 +41,13 @@ public class Main {
         contaEmilly.imprimir();
         System.out.println("--------------------------------------");
 
+        //Teste com Cheque Especial
+        System.out.println("Saldo da Emilly sem cheque especial: R$ " + contaEmilly.getSaldo());
+        System.out.println("Saldo da Emilly com cheque especial: R$ " + contaEmilly.retornarSaldoComChequeEspecial());
+        //Alterando Cheque Especial
+        contaEmilly.setChequeEspecial(1000.00);
+        System.out.println("Novo saldo da Emilly com alteração no cheque especial: R$ " + contaEmilly.retornarSaldoComChequeEspecial());
+
         System.out.println("########################################");
 
         //Teste Conta Poupança
