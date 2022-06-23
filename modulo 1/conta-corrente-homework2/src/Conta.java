@@ -67,11 +67,9 @@ public abstract class Conta implements Movimentacao {
     }
 
     public Boolean transferir(Conta conta, double valor) {
-        if (this.getSaldo() >= valor && valor > 0) {
-            this.setSaldo(this.getSaldo() - valor);
-            conta.setSaldo(conta.getSaldo() + valor);
+        if (this.sacar(valor)) {
             System.out.println("Transferência realizado de R$ " + valor + " com sucesso para " + conta.cliente.getNome() + ".\n Saldo atual: R$ " + this.saldo);
-            return true;
+            return conta.depositar(valor);
         } else {
             System.out.println("Não foi possível realizar a transferência de R$ " + valor + ".\n Seu saldo é insuficiente: R$ " + this.getSaldo());
             return false;
