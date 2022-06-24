@@ -1,5 +1,5 @@
 public class ContaPagamento extends Conta implements Impressao {
-    static Double TAXA_SAQUE = 4.25;
+    static final Double TAXA_SAQUE = 4.25;
 
     public ContaPagamento(Cliente cliente, String numeroConta, String agencia, Double saldo) {
         super(cliente, numeroConta, agencia, saldo);
