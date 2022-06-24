@@ -19,17 +19,21 @@ public class Cliente {
     }
 
     public void imprimirContatos() {
-        for (Contato contato:contatos) {
-            if (contato != null) {
-                contato.imprimirContato();
+        if (contatos != null) {
+            for (Contato contato:contatos) {
+                if (contato != null) {
+                    contato.imprimirContato();
+                }
             }
         }
     }
 
     public void imprimirEnderecos() {
-        for (Endereco endereco:enderecos) {
-            if (endereco != null) {
-                endereco.imprimirEndereco();
+        if (enderecos != null) {
+            for (Endereco endereco:enderecos) {
+                if (endereco != null) {
+                    endereco.imprimirEndereco();
+                }
             }
         }
     }
