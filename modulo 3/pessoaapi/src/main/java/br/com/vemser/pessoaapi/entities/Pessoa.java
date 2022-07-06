@@ -1,6 +1,7 @@
-package br.com.dbc.vemser.pessoaapi.entity;
+package br.com.vemser.pessoaapi.entities;
 
 import java.time.LocalDate;
+
 
 public class Pessoa {
 
@@ -17,6 +18,16 @@ public class Pessoa {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
+    }
+
+    @Override
+    public String toString() {
+        return "Pessoa{" +
+                "idPessoa=" + idPessoa +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", cpf='" + cpf + '\'' +
+                '}';
     }
 
     public Integer getIdPessoa() {
@@ -49,15 +60,5 @@ public class Pessoa {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    @Override
-    public String toString() {
-        return "Pessoa{" +
-                "idPessoa=" + idPessoa +
-                ", nome='" + nome + '\'' +
-                ", dataNascimento=" + dataNascimento +
-                ", cpf='" + cpf + '\'' +
-                '}';
     }
 }

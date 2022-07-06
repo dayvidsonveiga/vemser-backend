@@ -1,6 +1,7 @@
-package br.com.dbc.vemser.pessoaapi.repository;
+package br.com.vemser.pessoaapi.repository;
 
-import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
+import br.com.vemser.pessoaapi.entities.Pessoa;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Repository
 public class PessoaRepository {
     private static List<Pessoa> listaPessoas = new ArrayList<>();
     private AtomicInteger COUNTER = new AtomicInteger();
@@ -56,5 +58,17 @@ public class PessoaRepository {
         return listaPessoas.stream()
                 .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
                 .collect(Collectors.toList());
+    }
+
+    public Pessoa peopleByName(String nome) {
+        return listaPessoas.stream()
+                .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
+                .findFirst().orElse(null);
+    }
+
+    public Pessoa peopleById(int id) {
+        return listaPessoas.stream()
+                .filter(pessoa -> pessoa.getIdPessoa().equals(id))
+                .findFirst().orElse(null);
     }
 }

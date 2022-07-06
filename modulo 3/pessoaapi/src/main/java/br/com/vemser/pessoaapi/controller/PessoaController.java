@@ -1,7 +1,8 @@
-package br.com.dbc.vemser.pessoaapi.controller;
+package br.com.vemser.pessoaapi.controller;
 
-import br.com.dbc.vemser.pessoaapi.entity.Pessoa;
-import br.com.dbc.vemser.pessoaapi.service.PessoaService;
+import br.com.vemser.pessoaapi.entities.Pessoa;
+import br.com.vemser.pessoaapi.service.PessoaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RequestMapping("/pessoa") // localhost:8080/pessoa
 public class PessoaController {
 
+    @Autowired
     private PessoaService pessoaService;
 
     public PessoaController() {
@@ -23,27 +25,27 @@ public class PessoaController {
 
     @PostMapping // localhost:8080/pessoa
     public Pessoa create(@RequestBody Pessoa pessoa) {
-        return pessoaService.create(pessoa);
+        return pessoaService.adicionar(pessoa);
     }
 
     @GetMapping // localhost:8080/pessoa
     public List<Pessoa> list() {
-        return pessoaService.list();
+        return pessoaService.listar();
     }
 
     @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Rafa
     public List<Pessoa> listByName(@RequestParam("nome") String nome) {
-        return pessoaService.listByName(nome);
+        return pessoaService.listarPorNome(nome);
     }
 
     @PutMapping("/{idPessoa}") // localhost:8080/pessoa/1000
     public Pessoa update(@PathVariable("idPessoa") Integer id,
                          @RequestBody Pessoa pessoaAtualizar) throws Exception {
-        return pessoaService.update(id, pessoaAtualizar);
+        return pessoaService.editar(id, pessoaAtualizar);
     }
 
     @DeleteMapping("/{idPessoa}") // localhost:8080/pessoa/10
     public void delete(@PathVariable("idPessoa") Integer id) throws Exception {
-        pessoaService.delete(id);
+        pessoaService.deletar(id);
     }
 }
