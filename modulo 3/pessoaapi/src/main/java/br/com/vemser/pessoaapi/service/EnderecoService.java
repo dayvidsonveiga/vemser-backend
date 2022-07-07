@@ -31,7 +31,7 @@ public class EnderecoService {
     }
 
     public Endereco editar(int id, Endereco enderecoAtualizar) throws Exception {
-        Endereco enderecoRecuperado = recuperarEndereco(id);
+        Endereco enderecoRecuperado = recuperarPorIdEndereco(id);
         enderecoRecuperado.setIdPessoa(enderecoAtualizar.getIdPessoa());
         enderecoRecuperado.setLogradouro(enderecoAtualizar.getLogradouro());
         enderecoRecuperado.setComplemento(enderecoAtualizar.getComplemento());
@@ -42,7 +42,7 @@ public class EnderecoService {
     }
 
     public void deletar(int id) throws Exception {
-        Endereco enderecoRecuperado = recuperarEndereco(id);
+        Endereco enderecoRecuperado = recuperarPorIdEndereco(id);
         enderecoRepository.list().remove(enderecoRecuperado);
     }
 
@@ -51,7 +51,7 @@ public class EnderecoService {
     }
 
     public Endereco listarPorEndereco(int id) throws Exception {
-        Endereco enderecoRecuperado = recuperarEndereco(id);
+        Endereco enderecoRecuperado = recuperarPorIdEndereco(id);
         return enderecoRecuperado;
     }
 
@@ -61,7 +61,7 @@ public class EnderecoService {
                 .collect(Collectors.toList());
     }
 
-    private Endereco recuperarEndereco(Integer idEndereco) throws Exception {
+    private Endereco recuperarPorIdEndereco(Integer idEndereco) throws Exception {
         return  enderecoRepository.list().stream()
                 .filter(e -> e.getIdEndereco().equals(idEndereco))
                 .findFirst()
