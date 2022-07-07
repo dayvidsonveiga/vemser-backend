@@ -20,7 +20,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/{idEndereco}")
-    public List<Endereco> retornaEnderecoPorId(@PathVariable("idEndereco") Integer idEndereco){
+    public Endereco retornaEnderecoPorId(@PathVariable("idEndereco") Integer idEndereco) throws Exception {
         return enderecoService.listarPorEndereco(idEndereco);
     }
 
@@ -30,7 +30,7 @@ public class EnderecoController {
     }
 
     @PostMapping("/pessoa/{idPessoa}")
-    public Endereco adicionarPessoa(@PathVariable("idPessoa") Integer idPessoa, @RequestBody Endereco endereco){
+    public Endereco adicionarPessoa(@PathVariable("idPessoa") Integer idPessoa, @RequestBody Endereco endereco) throws Exception {
         return enderecoService.adicionar(idPessoa,endereco);
     }
 

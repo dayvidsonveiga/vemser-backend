@@ -30,21 +30,15 @@ public class EnderecoRepository {
         return listaEndereco;
     }
 
-    public Endereco update(Endereco endereco) throws Exception {
-        return endereco;
-    }
+//    public Endereco update(Endereco endereco) throws Exception {
+//        return endereco;
+//    }
 
-    public void delete(Endereco endereco) throws Exception {
-        listaEndereco.remove(endereco);
-    }
+//    public void delete(Endereco endereco) throws Exception {
+//        listaEndereco.remove(endereco);
+//    }
 
-    public static List<Endereco> getListaEndereco() {
-        return listaEndereco;
-    }
 
-    public static void setListaEndereco(List<Endereco> listaEndereco) {
-        EnderecoRepository.listaEndereco = listaEndereco;
-    }
 
 
 

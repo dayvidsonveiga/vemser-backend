@@ -24,7 +24,7 @@ public class PessoaController {
 
     @GetMapping("/ambiente")
     public String retornaAmbiente(){
-        return propertieReader.getUsuario();
+        return propertieReader.getAmbiente();
     }
 
     @GetMapping("/hello") // localhost:8080/pessoa/hello

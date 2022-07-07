@@ -6,14 +6,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class PropertieReader {
 
-    @Value("${user}")
-    private String usuario;
+    @Value("${ambiente}")
+    private String ambiente;
 
-    public String getUsuario() {
-        return usuario;
+    public String getAmbiente() {
+        return ambiente;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
 }
