@@ -2,10 +2,10 @@ package br.com.vemser.pessoaapi.entities;
 
 public class Contato {
 
-        private Integer idContato;
-        private Integer idPessoa;
-        private String numero;
-        private String descricao;
+    private Integer idContato;
+    private Integer idPessoa;
+    private String numero;
+    private String descricao;
 
     public Contato() {
     }
@@ -18,12 +18,12 @@ public class Contato {
     }
 
     public Integer getIdContato() {
-            return idContato;
-        }
+        return idContato;
+    }
 
-        public void setIdContato(Integer idContato) {
-            this.idContato = idContato;
-        }
+    public void setIdContato(Integer idContato) {
+        this.idContato = idContato;
+    }
 
     public Integer getIdPessoa() {
         return idPessoa;
@@ -34,20 +34,20 @@ public class Contato {
     }
 
     public String getNumero() {
-            return numero;
-        }
+        return numero;
+    }
 
-        public void setNumero(String numero) {
-            this.numero = numero;
-        }
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
 
-        public String getDescricao() {
-            return descricao;
-        }
+    public String getDescricao() {
+        return descricao;
+    }
 
-        public void setDescricao(String descricao) {
-            this.descricao = descricao;
-        }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
     @Override
     public String toString() {

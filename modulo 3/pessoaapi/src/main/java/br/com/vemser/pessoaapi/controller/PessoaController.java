@@ -1,6 +1,7 @@
 package br.com.vemser.pessoaapi.controller;
 
 import br.com.vemser.pessoaapi.entities.Pessoa;
+import br.com.vemser.pessoaapi.properties.PropertieReader;
 import br.com.vemser.pessoaapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,16 @@ public class PessoaController {
     @Autowired
     private PessoaService pessoaService;
 
+    @Autowired
+    private PropertieReader propertieReader;
+
     public PessoaController() {
         pessoaService = new PessoaService();
+    }
+
+    @GetMapping("/ambiente")
+    public String retornaAmbiente(){
+        return propertieReader.getUsuario();
     }
 
     @GetMapping("/hello") // localhost:8080/pessoa/hello

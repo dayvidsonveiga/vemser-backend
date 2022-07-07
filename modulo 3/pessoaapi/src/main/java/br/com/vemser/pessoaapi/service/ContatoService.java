@@ -1,7 +1,9 @@
 package br.com.vemser.pessoaapi.service;
 
 import br.com.vemser.pessoaapi.entities.Contato;
+import br.com.vemser.pessoaapi.entities.Pessoa;
 import br.com.vemser.pessoaapi.repository.ContatoRepository;
+import br.com.vemser.pessoaapi.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,6 @@ public class ContatoService {
     private ContatoRepository contatoRepository;
 
     public ContatoService(){
-        contatoRepository = new ContatoRepository();
     }
 
     public Contato adicionar(Integer id, Contato contato){

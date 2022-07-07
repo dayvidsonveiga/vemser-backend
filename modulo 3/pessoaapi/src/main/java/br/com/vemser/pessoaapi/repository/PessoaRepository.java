@@ -34,24 +34,20 @@ public class PessoaRepository {
         return listaPessoas;
     }
 
-    public Pessoa update(Integer id,
-                         Pessoa pessoaAtualizar) throws Exception {
-        Pessoa pessoaRecuperada = listaPessoas.stream()
-                .filter(pessoa -> pessoa.getIdPessoa().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Pessoa não econtrada"));
-        pessoaRecuperada.setCpf(pessoaAtualizar.getCpf());
-        pessoaRecuperada.setNome(pessoaAtualizar.getNome());
-        pessoaRecuperada.setDataNascimento(pessoaAtualizar.getDataNascimento());
-        return pessoaRecuperada;
+    public Pessoa update(Pessoa pessoaAtualizada) throws Exception {
+        return pessoaAtualizada;
     }
 
-    public void delete(Integer id) throws Exception {
-        Pessoa pessoaRecuperada = listaPessoas.stream()
-                .filter(pessoa -> pessoa.getIdPessoa().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Pessoa não econtrada"));
+    public void delete(Pessoa pessoaRecuperada) throws Exception {
         listaPessoas.remove(pessoaRecuperada);
+    }
+
+    public static List<Pessoa> getListaPessoas() {
+        return listaPessoas;
+    }
+
+    public static void setListaPessoas(List<Pessoa> listaPessoas) {
+        PessoaRepository.listaPessoas = listaPessoas;
     }
 
     public List<Pessoa> listByName(String nome) {

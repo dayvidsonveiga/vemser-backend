@@ -17,7 +17,6 @@ public class ContatoController {
     private ContatoService contatoService;
 
     public ContatoController() {
-        contatoService = new ContatoService();
     }
 
 
@@ -38,7 +37,7 @@ public class ContatoController {
 
     @PutMapping("/{idContato}") // localhost:8080/contato/1000
     public Contato update(@PathVariable("idContato") Integer id,
-                         @RequestBody Contato pessoaAtualizar) throws Exception {
+                          @RequestBody Contato pessoaAtualizar) throws Exception {
         PessoaService pessoaService = new PessoaService();
         return contatoService.editar(id, pessoaAtualizar);
     }
@@ -48,3 +47,4 @@ public class ContatoController {
         contatoService.deletar(id);
     }
 }
+

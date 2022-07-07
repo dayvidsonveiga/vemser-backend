@@ -43,8 +43,7 @@ public class ContatoRepository {
         return listaContatos;
     }
 
-    public Contato updateContato(Integer id,
-                         Contato pessoaAtualizar) throws Exception {
+    public Contato updateContato(Integer id, Contato pessoaAtualizar) throws Exception {
         Contato contato = new Contato();
         contato.setDescricao(contato.getDescricao());
         contato.setNumero(contato.getNumero());
