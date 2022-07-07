@@ -25,16 +25,13 @@ public class EnderecoService {
         Pessoa pessoaRecuperada = pessoaRepository.list().stream()
                 .filter(pessoa -> pessoa.getIdPessoa().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new Exception("Pessoa não encontrada"));
+                .orElseThrow(() -> new Exception("Endereço não encontrada"));
         endereco.setIdPessoa(pessoaRecuperada.getIdPessoa());
         return enderecoRepository.create(endereco);
     }
 
     public Endereco editar(int id, Endereco enderecoAtualizar) throws Exception {
-        Endereco enderecoRecuperado = enderecoRepository.list().stream()
-                .filter(e -> e.getIdEndereco().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Endereço não econtrada"));
+        Endereco enderecoRecuperado = recuperarEndereco(id);
         enderecoRecuperado.setIdPessoa(enderecoAtualizar.getIdPessoa());
         enderecoRecuperado.setLogradouro(enderecoAtualizar.getLogradouro());
         enderecoRecuperado.setComplemento(enderecoAtualizar.getComplemento());
@@ -45,10 +42,7 @@ public class EnderecoService {
     }
 
     public void deletar(int id) throws Exception {
-        Endereco enderecoRecuperado = enderecoRepository.list().stream()
-                .filter(e -> e.getIdEndereco().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Contato não econtrada"));
+        Endereco enderecoRecuperado = recuperarEndereco(id);
         enderecoRepository.list().remove(enderecoRecuperado);
     }
 
@@ -57,17 +51,20 @@ public class EnderecoService {
     }
 
     public Endereco listarPorEndereco(int id) throws Exception {
-        Endereco enderecoRecuperado = enderecoRepository.list().stream()
-                .filter(e -> e.getIdEndereco().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Endereço não encontrado"));
+        Endereco enderecoRecuperado = recuperarEndereco(id);
         return enderecoRecuperado;
-
     }
 
     public List<Endereco> listPorPessoa(Integer id) {
         return enderecoRepository.list().stream()
                 .filter(e -> e.getIdPessoa().equals(id))
                 .collect(Collectors.toList());
+    }
+
+    private Endereco recuperarEndereco(Integer idEndereco) throws Exception {
+        return  enderecoRepository.list().stream()
+                .filter(e -> e.getIdEndereco().equals(idEndereco))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Endereço não econtrada"));
     }
 }
