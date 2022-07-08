@@ -12,6 +12,7 @@ public class Endereco {
     private Integer idPessoa;
     @NotNull
     private TipoEndereco tipo;
+    @NotNull
     @Length(min = 1, max = 250)
     private String logradouro;
     @NotNull
