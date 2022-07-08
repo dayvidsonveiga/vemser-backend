@@ -1,6 +1,7 @@
 package br.com.vemser.pessoaapi.repository;
 
 import br.com.vemser.pessoaapi.entities.Endereco;
+import br.com.vemser.pessoaapi.enums.TipoEndereco;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -9,37 +10,31 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class EnderecoRepository {
-    private static List<Endereco> listaEndereco = new ArrayList<>();
+    private static List<Endereco> listaEnderecos = new ArrayList<>();
     private AtomicInteger COUNTER = new AtomicInteger();
 
-    public EnderecoRepository() {
-        listaEndereco.add(new Endereco(COUNTER.incrementAndGet() /*1*/, 1, "Rua Projetada 1", "AP 101", "Campos dos Goytacazes", "Rio de Janeiro", "Brasil"));
-        listaEndereco.add(new Endereco(COUNTER.incrementAndGet() /*1*/, 2, "Rua Projetada 2", "AP 102", "Campos dos Goytacazes", "Rio de Janeiro", "Brasil"));
-        listaEndereco.add(new Endereco(COUNTER.incrementAndGet() /*1*/, 3, "Rua Projetada 3", "AP 103", "Campos dos Goytacazes", "Rio de Janeiro", "Brasil"));
-        listaEndereco.add(new Endereco(COUNTER.incrementAndGet() /*1*/, 4, "Rua Projetada 4", "AP 104", "Campos dos Goytacazes", "Rio de Janeiro", "Brasil"));
-        listaEndereco.add(new Endereco(COUNTER.incrementAndGet() /*1*/, 5, "Rua Projetada 5", "AP 105", "Campos dos Goytacazes", "Rio de Janeiro", "Brasil"));
+    public EnderecoRepository(){
+        listaEnderecos.add(new Endereco(COUNTER.incrementAndGet(), 1, TipoEndereco.ofTipo(1), "Rua Presidente Dutra", 9
+                ,"Bairro Maria Cândida", "44915-000", "São Gabriel", "Bahia", "Brasil"));
+        listaEnderecos.add(new Endereco(COUNTER.incrementAndGet(), 2, TipoEndereco.ofTipo(2), "Rua das Margaridas", 250
+                ,"Centro", "15001-000", "São Paulo", "São Paulo", "Brasil"));
+        listaEnderecos.add(new Endereco(COUNTER.incrementAndGet(), 3, TipoEndereco.ofTipo(1), "Avenida dos Navegantes", 135
+                ,"Apartamento", "51125-000", "Passos", "Minas Gerais", "Brasil"));
+        listaEnderecos.add(new Endereco(COUNTER.incrementAndGet(), 4, TipoEndereco.ofTipo(2), "Avenida Paulista", 1010
+                ,"Hotel Bandeirantes", "11355-000", "São Paulo", "São Paulo", "Brasil"));
+        listaEnderecos.add(new Endereco(COUNTER.incrementAndGet(), 5, TipoEndereco.ofTipo(1), "Rua Getulio Vargas", 35
+                ,"Próximo ao Centro", "72220-000", "Brasília", "São Paulo", "Brasil"));
     }
 
-    public Endereco create(Endereco endereco) {
+    public Endereco create(Integer idPessoa, Endereco endereco) {
         endereco.setIdEndereco(COUNTER.incrementAndGet());
-        listaEndereco.add(endereco);
+        listaEnderecos.add(endereco);
         return endereco;
     }
 
     public List<Endereco> list() {
-        return listaEndereco;
+        return listaEnderecos;
     }
-
-//    public Endereco update(Endereco endereco) throws Exception {
-//        return endereco;
-//    }
-
-//    public void delete(Endereco endereco) throws Exception {
-//        listaEndereco.remove(endereco);
-//    }
-
-
-
 
 
 }

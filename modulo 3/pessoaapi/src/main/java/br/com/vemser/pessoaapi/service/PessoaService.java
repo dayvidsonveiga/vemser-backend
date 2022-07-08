@@ -1,6 +1,7 @@
 package br.com.vemser.pessoaapi.service;
 
 import br.com.vemser.pessoaapi.entities.Pessoa;
+import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.repository.PessoaRepository;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,53 +16,58 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public PessoaService(){
-    }
+//    public PessoaService(){
+//        pessoaRepository = new PessoaRepository();
+//    }
 
-    public Pessoa adicionar(Pessoa pessoa){
-        Boolean verificaNome = StringUtils.isBlank(pessoa.getNome());
-        Boolean verificaDataNascimento = StringUtils.isEmpty(pessoa.getCpf());
-        Boolean verificaCPF = StringUtils.isBlank(pessoa.getCpf());
-        Boolean verificaTamanhos = pessoa.getCpf().length() == 11;
-        if(verificaNome && verificaDataNascimento && verificaCPF && verificaTamanhos){
-            System.out.println("Nao e possivel adicionar está pessoa");
-        }
+    public Pessoa create(Pessoa pessoa) throws Exception {
+//        boolean pessoaExiste = ObjectUtils.isEmpty(pessoa.getDataNascimento());
+//        boolean nomeEmBranco = StringUtils.isBlank(pessoa.getNome());
+////        boolean cpfEmBranco = StringUtils.isBlank(pessoa.getCpf());
+//
+//        if (!nomeEmBranco && !pessoaExiste && !cpfEmBranco && pessoa.getCpf().length() == 14) {
         return pessoaRepository.create(pessoa);
+//        } else {
+//            throw new RegraDeNegocioException("Pessoa não foi criada");
+//        }
     }
 
-    public Pessoa editar(int id, Pessoa pessoa) throws Exception {
-        Pessoa pessoaRecuperada = PessoaRepository.getListaPessoas().stream()
-                .filter(p -> p.getIdPessoa().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Pessoa não econtrada"));
-        pessoaRecuperada.setCpf(pessoa.getCpf());
-        pessoaRecuperada.setNome(pessoa.getNome());
-        pessoaRecuperada.setDataNascimento(pessoa.getDataNascimento());
-        return pessoaRepository.update(pessoaRecuperada);
-    }
-
-    public void deletar(int id) throws Exception {
-        Pessoa pessoaRecuperada = PessoaRepository.getListaPessoas().stream()
-                .filter(pessoa -> pessoa.getIdPessoa().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Pessoa não econtrada"));
-        pessoaRepository.delete(pessoaRecuperada);
-    }
-
-    public List<Pessoa> listar(){
+    public List<Pessoa> list (){
         return pessoaRepository.list();
     }
 
-    public List<Pessoa> listarPorNome(String nome){
+    public Pessoa update(Integer id, Pessoa pessoaAtualizar) throws RegraDeNegocioException {
+        Pessoa pessoaRecuperada = findByIdPessoa(id);
+        pessoaRecuperada.setCpf(pessoaAtualizar.getCpf());
+        pessoaRecuperada.setNome(pessoaAtualizar.getNome());
+        pessoaRecuperada.setDataNascimento(pessoaAtualizar.getDataNascimento());
+        return pessoaRecuperada;
+    }
+
+    public void delete(Integer id) throws Exception {
+        Pessoa pessoaRecuperada = findByIdPessoa(id);
+        pessoaRepository.list().remove(pessoaRecuperada);
+    }
+
+    public List<Pessoa> listByName(String nome) {
         return pessoaRepository.listByName(nome);
     }
 
-    public Pessoa pessoaPorNome(String nome){
-        return pessoaRepository.peopleByName(nome);
+    public Pessoa findByIdPessoa(Integer idPessoa) throws RegraDeNegocioException {
+        Pessoa pessoaRecuperada = pessoaRepository.list().stream()
+                .filter(pessoa -> pessoa.getIdPessoa().equals(idPessoa))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Pessoa não encontrada"));
+
+        return pessoaRecuperada;
     }
 
-    public Pessoa pessoaPorId(int id){
-        return pessoaRepository.peopleById(id);
-    }
-
+    //Teste para verificar se consigo recuperar pessoa pelo nome
+//    public Pessoa findByName(String nome) throws RegraDeNegocioException {
+//        Pessoa pessoaNomeRecuperado = pessoaRepository.list().stream()
+//                .filter(pessoa -> pessoa.getNome().equals(nome))
+//                .findFirst()
+//                .orElseThrow(() -> new RegraDeNegocioException("Nome da Pessoa não encontrado"));
+//        return pessoaNomeRecuperado;
+//    }
 }
