@@ -1,5 +1,7 @@
 package br.com.vemser.pessoaapi.controller;
 
+import br.com.vemser.pessoaapi.dto.PessoaCreateDTO;
+import br.com.vemser.pessoaapi.dto.PessoaDTO;
 import br.com.vemser.pessoaapi.entities.Pessoa;
 import br.com.vemser.pessoaapi.properties.PropertieReader;
 import br.com.vemser.pessoaapi.service.PessoaService;
@@ -42,7 +44,7 @@ public class PessoaController {
     }
 
     @PostMapping
-    public ResponseEntity<Pessoa> create(@RequestBody @Valid Pessoa pessoa) throws Exception {
+    public ResponseEntity<PessoaDTO> create(@RequestBody @Valid PessoaCreateDTO pessoa) throws Exception {
 //        return ResponseEntity.ok(pessoaService.create(pessoa));
         //Um ou outro
         return new ResponseEntity<>(pessoaService.create(pessoa), HttpStatus.CREATED);

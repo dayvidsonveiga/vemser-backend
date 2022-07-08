@@ -1,8 +1,12 @@
 package br.com.vemser.pessoaapi.service;
 
+import br.com.vemser.pessoaapi.dto.PessoaCreateDTO;
+import br.com.vemser.pessoaapi.dto.PessoaDTO;
 import br.com.vemser.pessoaapi.entities.Pessoa;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.repository.PessoaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,25 +15,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
 //    public PessoaService(){
 //        pessoaRepository = new PessoaRepository();
 //    }
 
-    public Pessoa create(Pessoa pessoa) throws Exception {
-//        boolean pessoaExiste = ObjectUtils.isEmpty(pessoa.getDataNascimento());
-//        boolean nomeEmBranco = StringUtils.isBlank(pessoa.getNome());
-////        boolean cpfEmBranco = StringUtils.isBlank(pessoa.getCpf());
-//
-//        if (!nomeEmBranco && !pessoaExiste && !cpfEmBranco && pessoa.getCpf().length() == 14) {
-        return pessoaRepository.create(pessoa);
-//        } else {
-//            throw new RegraDeNegocioException("Pessoa não foi criada");
-//        }
+    public PessoaDTO create(PessoaCreateDTO pessoa) throws Exception {
+        log.info("Criando a pessoa...");
+        Pessoa pessoaEntity = objectMapper.convertValue(pessoa, Pessoa.class);
+        Pessoa pessoaCriada = pessoaRepository.create(pessoaEntity);
+
+        // Retorno
+
+        PessoaDTO pessoaDTO = new PessoaDTO();
+        pessoaDTO = objectMapper.convertValue(pessoaCriada, PessoaDTO.class);
+        log.warn("Pessoa " + pessoaDTO.getNome() + " criada!");
+        return pessoaDTO;
     }
 
     public List<Pessoa> list (){
@@ -37,16 +46,20 @@ public class PessoaService {
     }
 
     public Pessoa update(Integer id, Pessoa pessoaAtualizar) throws RegraDeNegocioException {
+        log.info("Atualizando a pessoa...");
         Pessoa pessoaRecuperada = findByIdPessoa(id);
         pessoaRecuperada.setCpf(pessoaAtualizar.getCpf());
         pessoaRecuperada.setNome(pessoaAtualizar.getNome());
         pessoaRecuperada.setDataNascimento(pessoaAtualizar.getDataNascimento());
+        log.info("Pessoa atualizada!");
         return pessoaRecuperada;
     }
 
     public void delete(Integer id) throws Exception {
+        log.info("Deletando a pessoa...");
         Pessoa pessoaRecuperada = findByIdPessoa(id);
         pessoaRepository.list().remove(pessoaRecuperada);
+        log.info("Pessoa deletada!");
     }
 
     public List<Pessoa> listByName(String nome) {

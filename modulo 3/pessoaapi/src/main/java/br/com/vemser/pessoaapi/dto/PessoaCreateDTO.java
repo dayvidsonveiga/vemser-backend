@@ -1,15 +1,13 @@
-package br.com.vemser.pessoaapi.entities;
+package br.com.vemser.pessoaapi.dto;
 
-import lombok.*;
+import lombok.Data;
+import org.hibernate.validator.constraints.br.CPF;
+
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class Pessoa {
-
-    private Integer idPessoa;
+public class PessoaCreateDTO {
 
     @NotBlank(message = "Insira um nome!" )
     private String nome;
@@ -21,5 +19,4 @@ public class Pessoa {
     @NotEmpty
     @Size(min = 11, max = 11, message = "CPF deve conter 11 números")
     private String cpf;
-
 }
