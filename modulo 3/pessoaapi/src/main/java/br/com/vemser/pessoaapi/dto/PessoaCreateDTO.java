@@ -1,11 +1,13 @@
 package br.com.vemser.pessoaapi.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.validator.constraints.br.CPF;
-
+import lombok.NoArgsConstructor;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class PessoaCreateDTO {
 

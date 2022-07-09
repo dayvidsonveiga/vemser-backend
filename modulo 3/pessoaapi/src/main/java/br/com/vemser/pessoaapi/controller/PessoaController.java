@@ -3,6 +3,7 @@ package br.com.vemser.pessoaapi.controller;
 import br.com.vemser.pessoaapi.dto.PessoaCreateDTO;
 import br.com.vemser.pessoaapi.dto.PessoaDTO;
 import br.com.vemser.pessoaapi.entities.Pessoa;
+import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.properties.PropertieReader;
 import br.com.vemser.pessoaapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,41 +34,41 @@ public class PessoaController {
 //        this.pessoaService = pessoaService;
 //    }
 
-    @GetMapping("/ambiente")
-    public String getAmbiente(){
-        return propertieReader.getAmbiente();
-    }
-
-    @GetMapping("/hello") //localhost:8080/pessoa/hello
-    public String hello(){
-        return "Hello World!";
-    }
-
     @PostMapping
-    public ResponseEntity<PessoaDTO> create(@RequestBody @Valid PessoaCreateDTO pessoa) throws Exception {
+    public ResponseEntity<PessoaDTO> create(@RequestBody @Valid PessoaCreateDTO pessoa) throws RegraDeNegocioException {
 //        return ResponseEntity.ok(pessoaService.create(pessoa));
         //Um ou outro
         return new ResponseEntity<>(pessoaService.create(pessoa), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{idPessoa}")
+    public ResponseEntity<PessoaDTO> update(@PathVariable("idPessoa") Integer id, @RequestBody @Valid PessoaCreateDTO pessoaDTOAtualizar) throws RegraDeNegocioException {
+        return new ResponseEntity<>(pessoaService.update(id, pessoaDTOAtualizar), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{idPessoa}")
+    public void delete(@PathVariable("idPessoa") Integer id) throws RegraDeNegocioException {
+        pessoaService.delete(id);
+    }
+
+    @GetMapping("/ambiente")
+    public String getAmbiente() {
+        return propertieReader.getAmbiente();
+    }
+
+    @GetMapping("/hello") //localhost:8080/pessoa/hello
+    public String hello() {
+        return "Hello World!";
+    }
+
     @GetMapping
-    public List<Pessoa> list (){
+    public List<PessoaDTO> list() {
         return pessoaService.list();
     }
 
     @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Paulo
-    public List<Pessoa> listByName(@RequestParam("nome") String nome) {
+    public List<PessoaDTO> listByName(@RequestParam("nome") String nome) {
         return pessoaService.listByName(nome);
-    }
-
-    @PutMapping("/{idPessoa}")
-    public ResponseEntity<Pessoa> update(@PathVariable("idPessoa") Integer id, @RequestBody @Valid Pessoa pessoaAtualizar) throws Exception{
-        return new ResponseEntity<>(pessoaService.update(id, pessoaAtualizar), HttpStatus.ACCEPTED);
-    }
-
-    @DeleteMapping("/{idPessoa}")
-    public void delete(@PathVariable("idPessoa") Integer id) throws Exception {
-        pessoaService.delete(id);
     }
 
 

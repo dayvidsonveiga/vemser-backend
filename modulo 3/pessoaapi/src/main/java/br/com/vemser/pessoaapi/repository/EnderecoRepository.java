@@ -26,7 +26,7 @@ public class EnderecoRepository {
                 ,"Próximo ao Centro", "72220-000", "Brasília", "São Paulo", "Brasil"));
     }
 
-    public Endereco create(Integer idPessoa, Endereco endereco) {
+    public Endereco create(Endereco endereco) {
         endereco.setIdEndereco(COUNTER.incrementAndGet());
         listaEnderecos.add(endereco);
         return endereco;

@@ -35,7 +35,7 @@ public class ContatoRepository {
         listaContatos.add(new Contato(COUNTER.incrementAndGet() /*5*/, 5, TipoContato.RESIDENCIAL, "7195287284584", "Whatsapp"));
     }
 
-    public Contato create(Integer idPessoa, Contato contato) {
+    public Contato create(Contato contato) {
         contato.setIdContato(COUNTER.incrementAndGet());
         listaContatos.add(contato);
         return contato;

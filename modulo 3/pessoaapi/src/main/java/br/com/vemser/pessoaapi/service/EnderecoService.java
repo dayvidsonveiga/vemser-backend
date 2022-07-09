@@ -1,14 +1,17 @@
 package br.com.vemser.pessoaapi.service;
 
+import br.com.vemser.pessoaapi.dto.EnderecoCreateDTO;
+import br.com.vemser.pessoaapi.dto.EnderecoDTO;
 import br.com.vemser.pessoaapi.entities.Endereco;
 import br.com.vemser.pessoaapi.entities.Pessoa;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.repository.EnderecoRepository;
-import br.com.vemser.pessoaapi.repository.PessoaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,56 +25,83 @@ public class EnderecoService {
     @Autowired
     private PessoaService pessoaService;
 
-    public Endereco create(Integer idPessoa, Endereco endereco) throws RegraDeNegocioException {
+    @Autowired
+    ObjectMapper objectMapper;
+
+    public EnderecoDTO create(Integer idPessoa, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando endereço...");
-        pessoaService.findByIdPessoa(idPessoa);
-        endereco.setIdPessoa(idPessoa);
+        Pessoa pessoa = pessoaService.findByIdPessoa(idPessoa);
+        log.info("Criando o endereço para: " + pessoa.getNome());
+
+        Endereco enderecoEntity = objectMapper.convertValue(enderecoCreateDTO, Endereco.class);
+        enderecoEntity.setIdPessoa(idPessoa);
+        enderecoEntity = enderecoRepository.create(enderecoEntity);
+
+        EnderecoDTO enderecoDTO = objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);
         log.info("Endereço criado!");
-        return enderecoRepository.create(idPessoa, endereco);
+        return enderecoDTO;
     }
 
-    public List<Endereco> list() {
-        return enderecoRepository.list();
-    }
-
-    public Endereco update(Integer id, Endereco enderecoAtualizar) throws RegraDeNegocioException {
+    public EnderecoDTO update(Integer id, EnderecoCreateDTO enderecoCreateDTOAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando endereço...");
-        pessoaService.findByIdPessoa(id);
-        Endereco enderecoAtualizado = finByIdEndereco(id);
-        enderecoAtualizado.setTipo(enderecoAtualizar.getTipo());
-        enderecoAtualizado.setLogradouro(enderecoAtualizar.getLogradouro());
-        enderecoAtualizado.setNumero(enderecoAtualizar.getNumero());
-        enderecoAtualizado.setComplemento(enderecoAtualizar.getComplemento());
-        enderecoAtualizado.setCep(enderecoAtualizar.getCep());
-        enderecoAtualizado.setCidade(enderecoAtualizar.getCidade());
-        enderecoAtualizado.setEstado(enderecoAtualizar.getEstado());
-        enderecoAtualizado.setPais(enderecoAtualizar.getPais());
+        Endereco enderecoEntityAtualizado = findByIdEndereco(id);
+        Pessoa pessoaRecuperada = pessoaService.findByIdPessoa(enderecoEntityAtualizado.getIdPessoa());
+        log.info("Atualizando o endereço de: " + pessoaRecuperada.getNome());
+
+        enderecoEntityAtualizado.setTipo(enderecoCreateDTOAtualizar.getTipo());
+        enderecoEntityAtualizado.setLogradouro(enderecoCreateDTOAtualizar.getLogradouro());
+        enderecoEntityAtualizado.setNumero(enderecoCreateDTOAtualizar.getNumero());
+        enderecoEntityAtualizado.setComplemento(enderecoCreateDTOAtualizar.getComplemento());
+        enderecoEntityAtualizado.setCep(enderecoCreateDTOAtualizar.getCep());
+        enderecoEntityAtualizado.setCidade(enderecoCreateDTOAtualizar.getCidade());
+        enderecoEntityAtualizado.setEstado(enderecoCreateDTOAtualizar.getEstado());
+        enderecoEntityAtualizado.setPais(enderecoCreateDTOAtualizar.getPais());
+
+        EnderecoDTO enderecoDTO = objectMapper.convertValue(enderecoEntityAtualizado, EnderecoDTO.class);
         log.info("Endereço atualizado!");
-        return enderecoAtualizado;
+        return enderecoDTO;
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
         log.info("Deletando endereço...");
-        enderecoRepository.list().stream()
-                .filter(endereco -> endereco.getIdEndereco().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
+        Endereco enderecoRecuperado = findByIdEndereco(id);
+        enderecoRepository.list().remove(enderecoRecuperado);
         log.info("Endereço deletado!");
     }
 
-    public List<Endereco> listByIdEndereco(Integer idEndereco) {
-        return enderecoRepository.list().stream()
+    public List<EnderecoDTO> list() {
+        List<Endereco> listEnderecoEntity = enderecoRepository.list();
+        List<EnderecoDTO> listEnderecoDTO = new ArrayList<>();
+        for (Endereco endereco : listEnderecoEntity) {
+            listEnderecoDTO.add(objectMapper.convertValue(endereco, EnderecoDTO.class));
+        }
+        return listEnderecoDTO;
+    }
+
+    public List<EnderecoDTO> listByIdEndereco(Integer idEndereco) {
+        List<Endereco> listEnderecoEntity = enderecoRepository.list().stream()
                 .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
                 .collect(Collectors.toList());
+        List<EnderecoDTO> listEnderecoDTO = new ArrayList<>();
+        for (Endereco endereco : listEnderecoEntity) {
+            listEnderecoDTO.add(objectMapper.convertValue(endereco, EnderecoDTO.class));
+        }
+        return listEnderecoDTO;
     }
 
-    public List<Endereco> listByIdPessoa(Integer idPessoa) {
-        return enderecoRepository.list().stream()
+    public List<EnderecoDTO> listByIdPessoa(Integer idPessoa) {
+        List<Endereco> listEnderecoEntity = enderecoRepository.list().stream()
                 .filter(pessoa -> pessoa.getIdPessoa().equals(idPessoa))
                 .collect(Collectors.toList());
+        List<EnderecoDTO> listEnderecoDTO = new ArrayList<>();
+        for (Endereco endereco : listEnderecoEntity) {
+            listEnderecoDTO.add(objectMapper.convertValue(endereco, EnderecoDTO.class));
+        }
+        return listEnderecoDTO;
     }
 
-    public Endereco finByIdEndereco(Integer idEndereco) throws RegraDeNegocioException {
+    //Utilização interna
+    public Endereco findByIdEndereco(Integer idEndereco) throws RegraDeNegocioException {
         Endereco enderecoById = enderecoRepository.list().stream()
                 .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
                 .findFirst()
