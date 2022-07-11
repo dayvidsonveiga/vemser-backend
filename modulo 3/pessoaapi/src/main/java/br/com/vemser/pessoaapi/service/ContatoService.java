@@ -30,7 +30,7 @@ public class ContatoService {
     private PessoaRepository pessoaRepository;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
 //    public ContatoService(){
 //        contatoRepository = new ContatoRepository();
