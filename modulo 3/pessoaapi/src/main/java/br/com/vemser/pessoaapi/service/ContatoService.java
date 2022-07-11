@@ -72,23 +72,19 @@ public class ContatoService {
     }
 
     public List<ContatoDTO> list (){
-        List<Contato> listContatosEntity = contatoRepository.list();
-        List<ContatoDTO> listContatosDTO = new ArrayList<>();
-        for (Contato contato : listContatosEntity ) {
-            listContatosDTO.add(objectMapper.convertValue(contato, ContatoDTO.class));
-        }
-        return listContatosDTO;
+        log.info("Listar todos os contatos");
+        return contatoRepository.list().stream()
+                .map(contato -> objectMapper.convertValue(contato, ContatoDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<ContatoDTO> listByIdPessoa(Integer idPessoa) {
-        List<Contato> listContatoEntity = contatoRepository.list().stream()
+    public List<ContatoDTO> listByIdPessoa(Integer idPessoa) throws RegraDeNegocioException {
+        log.info("Listar contato por idPessoa");
+        pessoaService.findByIdPessoa(idPessoa);
+        return contatoRepository.list().stream()
                 .filter(contato -> contato.getIdPessoa().equals(idPessoa))
+                .map(contato -> objectMapper.convertValue(contato, ContatoDTO.class))
                 .collect(Collectors.toList());
-        List<ContatoDTO> listContatoDTO = new ArrayList<>();
-        for (Contato contato : listContatoEntity) {
-            listContatoDTO.add(objectMapper.convertValue(contato, ContatoDTO.class));
-        }
-        return listContatoDTO;
     }
 
     //Utilização Interna

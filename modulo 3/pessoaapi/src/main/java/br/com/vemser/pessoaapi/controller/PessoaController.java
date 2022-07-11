@@ -5,6 +5,7 @@ import br.com.vemser.pessoaapi.dto.PessoaDTO;
 import br.com.vemser.pessoaapi.entities.Pessoa;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.properties.PropertieReader;
+import br.com.vemser.pessoaapi.service.EmailService;
 import br.com.vemser.pessoaapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class PessoaController {
 
     @Autowired
     private PessoaService pessoaService;
+
+    @Autowired
+    private EmailService emailService;
 
     //Modelo mais novo
 //    private final PessoaService pessoaService;
@@ -61,13 +66,19 @@ public class PessoaController {
         return "Hello World!";
     }
 
+    @GetMapping("/email") //localhost:8080/pessoa/hello
+    public String email() throws MessagingException {
+        emailService.sendWithAttachment();
+        return "Enviando e-mail...";
+    }
+
     @GetMapping
     public List<PessoaDTO> list() {
         return pessoaService.list();
     }
 
     @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Paulo
-    public List<PessoaDTO> listByName(@RequestParam("nome") String nome) {
+    public List<PessoaDTO> listByName(@RequestParam("nome") String nome) throws RegraDeNegocioException {
         return pessoaService.listByName(nome);
     }
 

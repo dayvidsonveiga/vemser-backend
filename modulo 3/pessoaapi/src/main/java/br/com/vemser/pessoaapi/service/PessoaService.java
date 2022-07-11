@@ -64,23 +64,29 @@ public class PessoaService {
     }
 
     public List<PessoaDTO> list() {
-        List<PessoaDTO> pessoasDTO = new ArrayList<>();
-        List<Pessoa> pessoasEntity = pessoaRepository.list();
-        for (Pessoa pessoa : pessoasEntity) {
-            pessoasDTO.add(objectMapper.convertValue(pessoa, PessoaDTO.class));
-        }
-        return pessoasDTO;
+        log.info("Listar todas as pessoas");
+        return pessoaRepository.list().stream()
+                .map(pessoa -> objectMapper.convertValue(pessoa, PessoaDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<PessoaDTO> listByName(String nome) {
-        List<PessoaDTO> pessoasDTO = new ArrayList<>();
-        List<Pessoa> pessoasEntity = pessoaRepository.list().stream()
-                .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
-                .collect(Collectors.toList());
-        for (Pessoa pessoa : pessoasEntity) {
-            pessoasDTO.add(objectMapper.convertValue(pessoa, PessoaDTO.class));
+    public PessoaDTO listByIdPessoa(Integer idPessoa) throws RegraDeNegocioException {
+        log.info("Listar pessoa por id");
+        return objectMapper.convertValue(findByIdPessoa(idPessoa), PessoaDTO.class);
+    }
+
+    public List<PessoaDTO> listByName(String nome) throws RegraDeNegocioException {
+        log.info("Listar pessoa por nome");
+        if(findByName(nome).isEmpty()){
+            log.info("Nome não encontrado");
+            throw new RegraDeNegocioException("Nome não encontrado");
         }
-        return pessoasDTO;
+        else {
+            log.info("Nome encontrado");
+            return findByName(nome).stream()
+                    .map(pessoa -> objectMapper.convertValue(pessoa, PessoaDTO.class))
+                    .collect(Collectors.toList());
+        }
     }
 
     //Utilização Interna
@@ -89,6 +95,12 @@ public class PessoaService {
                 .filter(pessoa -> pessoa.getIdPessoa().equals(idPessoa))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Pessoa não encontrada"));
+    }
+
+    public List<Pessoa> findByName(String nome) {
+        return pessoaRepository.list().stream()
+                .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
+                .collect(Collectors.toList());
     }
 
 }

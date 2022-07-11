@@ -41,11 +41,11 @@ public class EnderecoController {
     }
 
     @GetMapping("/{idEndereco}")
-    public List<EnderecoDTO> listByIdEndereco (@PathVariable ("idEndereco") Integer idEndereco) throws RegraDeNegocioException {
+    public EnderecoDTO listByIdEndereco (@PathVariable ("idEndereco") Integer idEndereco) throws RegraDeNegocioException {
         return enderecoService.listByIdEndereco(idEndereco);
     }
     @GetMapping("/{idPessoa}/pessoa")
-    public List<EnderecoDTO> listByIdPessoa (@PathVariable ("idPessoa") Integer idPessoa) {
+    public List<EnderecoDTO> listByIdPessoa (@PathVariable ("idPessoa") Integer idPessoa) throws RegraDeNegocioException {
         return enderecoService.listByIdPessoa(idPessoa);
     }
 

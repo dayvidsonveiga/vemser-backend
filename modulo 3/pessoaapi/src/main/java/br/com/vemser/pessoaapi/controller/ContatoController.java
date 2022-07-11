@@ -53,7 +53,7 @@ public class ContatoController {
     }
 
     @GetMapping("/{idPessoa}") //localhost:8080/contato/2
-    public List<ContatoDTO> listByIdPessoa(@PathVariable ("idPessoa") Integer idPessoa) {
+    public List<ContatoDTO> listByIdPessoa(@PathVariable ("idPessoa") Integer idPessoa) throws RegraDeNegocioException {
         return contatoService.listByIdPessoa(idPessoa);
     }
 }

@@ -70,34 +70,24 @@ public class EnderecoService {
     }
 
     public List<EnderecoDTO> list() {
-        List<Endereco> listEnderecoEntity = enderecoRepository.list();
-        List<EnderecoDTO> listEnderecoDTO = new ArrayList<>();
-        for (Endereco endereco : listEnderecoEntity) {
-            listEnderecoDTO.add(objectMapper.convertValue(endereco, EnderecoDTO.class));
-        }
-        return listEnderecoDTO;
+        log.info("Listar todos os endereços");
+        return enderecoRepository.list().stream()
+                .map(endereco -> objectMapper.convertValue(endereco, EnderecoDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<EnderecoDTO> listByIdEndereco(Integer idEndereco) {
-        List<Endereco> listEnderecoEntity = enderecoRepository.list().stream()
-                .filter(endereco -> endereco.getIdEndereco().equals(idEndereco))
-                .collect(Collectors.toList());
-        List<EnderecoDTO> listEnderecoDTO = new ArrayList<>();
-        for (Endereco endereco : listEnderecoEntity) {
-            listEnderecoDTO.add(objectMapper.convertValue(endereco, EnderecoDTO.class));
-        }
-        return listEnderecoDTO;
+    public EnderecoDTO listByIdEndereco(Integer idEndereco) throws RegraDeNegocioException {
+        log.info("Listar endereco por id");
+        return objectMapper.convertValue(findByIdEndereco(idEndereco), EnderecoDTO.class);
     }
 
-    public List<EnderecoDTO> listByIdPessoa(Integer idPessoa) {
-        List<Endereco> listEnderecoEntity = enderecoRepository.list().stream()
-                .filter(pessoa -> pessoa.getIdPessoa().equals(idPessoa))
+    public List<EnderecoDTO> listByIdPessoa(Integer idPessoa) throws RegraDeNegocioException {
+        log.info("Listar endereco por id de Pessoa");
+        pessoaService.findByIdPessoa(idPessoa);
+        return enderecoRepository.list().stream()
+                .filter(endereco -> endereco.getIdPessoa().equals(idPessoa))
+                .map(endereco -> objectMapper.convertValue(endereco, EnderecoDTO.class))
                 .collect(Collectors.toList());
-        List<EnderecoDTO> listEnderecoDTO = new ArrayList<>();
-        for (Endereco endereco : listEnderecoEntity) {
-            listEnderecoDTO.add(objectMapper.convertValue(endereco, EnderecoDTO.class));
-        }
-        return listEnderecoDTO;
     }
 
     //Utilização interna
