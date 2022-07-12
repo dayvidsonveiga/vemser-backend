@@ -15,16 +15,8 @@ import javax.validation.constraints.Size;
 public class Contato {
 
     private Integer idContato;
-
     private Integer idPessoa;
-
-    @NotNull
     private TipoContato tipoContato;
-
-    @NotBlank
-    @Size(min = 1, max = 13, message = "Número pode ter até 13 números")
     private String numero;
-
-    @NotBlank
     private String descricao;
 }

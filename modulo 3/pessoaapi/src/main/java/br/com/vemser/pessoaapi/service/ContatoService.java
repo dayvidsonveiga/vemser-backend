@@ -30,6 +30,9 @@ public class ContatoService {
     private PessoaRepository pessoaRepository;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
 //    public ContatoService(){
@@ -46,28 +49,32 @@ public class ContatoService {
         contatoEntity = contatoRepository.create(contatoEntity);
 
         ContatoDTO contatoDTO = objectMapper.convertValue(contatoEntity, ContatoDTO.class);
+        emailService.sendEmailAdicionarContato(pessoa);
         log.info("Contato adicionado!");
         return contatoDTO;
     }
 
-    public ContatoDTO update(Integer id, ContatoCreateDTO contatoCreateDTOAtualizar) throws RegraDeNegocioException{
+    public ContatoDTO update(Integer idContato, ContatoCreateDTO contatoCreateDTOAtualizar) throws RegraDeNegocioException{
         log.info("Atualizando contato...");
-        Contato contatoEntityAtualizado = findByIdContato(id);
-        pessoaService.findByIdPessoa(id);
+        Contato contatoEntityAtualizado = findByIdContato(idContato);
+        Pessoa pessoa = pessoaService.findByIdPessoa(contatoEntityAtualizado.getIdPessoa());
 
         contatoEntityAtualizado.setTipoContato(contatoCreateDTOAtualizar.getTipoContato());
         contatoEntityAtualizado.setNumero(contatoCreateDTOAtualizar.getNumero());
         contatoEntityAtualizado.setDescricao(contatoCreateDTOAtualizar.getDescricao());
 
         ContatoDTO contatoDTO = objectMapper.convertValue(contatoEntityAtualizado, ContatoDTO.class);
+        emailService.sendEmailAtualizarContato(pessoa);
         log.info("Contato atualizado!");
         return contatoDTO;
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException {
+    public void delete(Integer idContato) throws RegraDeNegocioException {
         log.info("Deletando contato...");
-        Contato contatoRecuperado = findByIdContato(id);
+        Contato contatoRecuperado = findByIdContato(idContato);
+        Pessoa pessoa = pessoaService.findByIdPessoa(contatoRecuperado.getIdPessoa());
         contatoRepository.deleteContato(contatoRecuperado);
+        emailService.sendEmailRemoverContato(pessoa);
         log.info("Contato deletado!");
     }
 

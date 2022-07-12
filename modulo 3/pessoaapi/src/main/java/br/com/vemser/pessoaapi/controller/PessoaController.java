@@ -69,6 +69,7 @@ public class PessoaController {
     @GetMapping("/email") //localhost:8080/pessoa/hello
     public String email() throws MessagingException {
         emailService.sendWithAttachment();
+//        emailService.sendEmail();
         return "Enviando e-mail...";
     }
 

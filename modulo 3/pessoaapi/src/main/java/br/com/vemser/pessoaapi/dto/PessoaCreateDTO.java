@@ -21,4 +21,7 @@ public class PessoaCreateDTO {
     @NotEmpty
     @Size(min = 11, max = 11, message = "CPF deve conter 11 números")
     private String cpf;
+
+    @NotBlank
+    private String email;
 }

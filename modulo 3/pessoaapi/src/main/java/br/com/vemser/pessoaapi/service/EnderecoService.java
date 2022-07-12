@@ -26,6 +26,9 @@ public class EnderecoService {
     private PessoaService pessoaService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     public EnderecoDTO create(Integer idPessoa, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
@@ -39,12 +42,13 @@ public class EnderecoService {
 
         EnderecoDTO enderecoDTO = objectMapper.convertValue(enderecoEntity, EnderecoDTO.class);
         log.info("Endereço criado!");
+        emailService.sendEmailAdicionarEndereco(pessoa);
         return enderecoDTO;
     }
 
-    public EnderecoDTO update(Integer id, EnderecoCreateDTO enderecoCreateDTOAtualizar) throws RegraDeNegocioException {
+    public EnderecoDTO update(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTOAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando endereço...");
-        Endereco enderecoEntityAtualizado = findByIdEndereco(id);
+        Endereco enderecoEntityAtualizado = findByIdEndereco(idEndereco);
         Pessoa pessoaRecuperada = pessoaService.findByIdPessoa(enderecoEntityAtualizado.getIdPessoa());
         log.info("Atualizando o endereço de: " + pessoaRecuperada.getNome());
 
@@ -59,13 +63,16 @@ public class EnderecoService {
 
         EnderecoDTO enderecoDTO = objectMapper.convertValue(enderecoEntityAtualizado, EnderecoDTO.class);
         log.info("Endereço atualizado!");
+        emailService.sendEmailAtualizarEndereco(pessoaRecuperada);
         return enderecoDTO;
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException {
+    public void delete(Integer idEndereco) throws RegraDeNegocioException {
         log.info("Deletando endereço...");
-        Endereco enderecoRecuperado = findByIdEndereco(id);
+        Endereco enderecoRecuperado = findByIdEndereco(idEndereco);
+        Pessoa pessoaRecuperada = pessoaService.findByIdPessoa(enderecoRecuperado.getIdPessoa());
         enderecoRepository.list().remove(enderecoRecuperado);
+        emailService.sendEmailRemoverEndereco(pessoaRecuperada);
         log.info("Endereço deletado!");
     }
 

@@ -26,6 +26,9 @@ public class PessoaService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private EmailService emailService;
+
 //    public PessoaService(){
 //        pessoaRepository = new PessoaRepository();
 //    }
@@ -40,6 +43,7 @@ public class PessoaService {
         //Convertendo PessoaEntity em PessoaDTO para utilização na Service
         PessoaDTO pessoaDTO = objectMapper.convertValue(pessoaEntity, PessoaDTO.class);
         log.info("Pessoa " + pessoaDTO.getNome() + " criada!");
+        emailService.sendEmailCriarPessoa(pessoaDTO);
         return pessoaDTO;
     }
 
@@ -53,6 +57,7 @@ public class PessoaService {
 
         PessoaDTO pessoaDTO = objectMapper.convertValue(pessoaEntity, PessoaDTO.class);
         log.info(pessoaDTO.getNome() + " teve seus dados atualizados no banco");
+        emailService.sendEmailAlterarPessoa(pessoaDTO);
         return pessoaDTO;
     }
 
@@ -61,6 +66,7 @@ public class PessoaService {
         Pessoa pessoaRecuperada = findByIdPessoa(id);
         pessoaRepository.list().remove(pessoaRecuperada);
         log.info(pessoaRecuperada.getNome() + " foi removido do banco de dados");
+        emailService.sendEmailDeletarPessoa(pessoaRecuperada);
     }
 
     public List<PessoaDTO> list() {
