@@ -26,9 +26,6 @@ public class PessoaService {
     @Autowired
     private EmailService emailService;
 
-//    public PessoaService(){
-//        pessoaRepository = new PessoaRepository();
-//    }
 
     public List<PessoaDTO> list() {
         return pessoaRepository.findAll()
