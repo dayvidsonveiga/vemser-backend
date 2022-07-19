@@ -33,7 +33,7 @@ public class ContatoController {
     )
     @PostMapping ("/{idPessoa}")//localhost:8080/contato
     public ResponseEntity<ContatoDTO> create(@PathVariable ("idPessoa") Integer idPessoa, @RequestBody @Valid ContatoCreateDTO contatoCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(contatoService.create(idPessoa, contatoCreateDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(contatoService.create(contatoCreateDTO, idPessoa), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Atualizar contato", description = "Atualiza um contato, localizando-o por seu ID")
