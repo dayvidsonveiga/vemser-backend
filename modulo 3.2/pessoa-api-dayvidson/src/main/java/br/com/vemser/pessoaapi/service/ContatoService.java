@@ -38,68 +38,73 @@ public class ContatoService {
 //        contatoRepository = new ContatoRepository();
 //    }
 
-    public ContatoDTO create(Integer idPessoa, ContatoCreateDTO contatoCreateDTO) throws RegraDeNegocioException {
-        log.info("Criando contato...");
-        PessoaEntity pessoaEntity = pessoaService.findByIdPessoa(idPessoa);
-        log.info("Adicionando contato para " + pessoaEntity.getNome());
+    public List<ContatoDTO> list() {
+        return contatoRepository.findAll()
+                .stream()
+                .map(this::contatoToContatoDto)
+                .toList();
+    }
 
+    public ContatoDTO create(ContatoCreateDTO contatoCreateDTO, Integer idPessoa) throws RegraDeNegocioException {
+        PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
         contatoCreateDTO.setIdPessoa(idPessoa);
-        ContatoEntity contatoEntity = objectMapper.convertValue(contatoCreateDTO, ContatoEntity.class);
-        contatoEntity = contatoRepository.create(contatoEntity);
 
-        ContatoDTO contatoDTO = objectMapper.convertValue(contatoEntity, ContatoDTO.class);
-        emailService.sendEmailAdicionarContato(pessoaEntity);
-        log.info("ContatoEntity adicionado!");
+        log.info("Adicionando contato à pessoa: " + pessoa.getNome());
+        ContatoDTO contatoDTO = contatoToContatoDto(
+                contatoRepository.save(contatoCreateDtoToContato(contatoCreateDTO)));
+        log.info("Contato adicionado");
+
+        emailService.sendEmailAdicionarContato(pessoa);
+
         return contatoDTO;
     }
 
-    public ContatoDTO update(Integer idContato, ContatoCreateDTO contatoCreateDTOAtualizar) throws RegraDeNegocioException{
-        log.info("Atualizando contato...");
-        ContatoEntity contatoEntityEntityAtualizado = findByIdContato(idContato);
-        PessoaEntity pessoaEntity = pessoaService.findByIdPessoa(contatoEntityEntityAtualizado.getIdPessoa());
+    public ContatoDTO update(Integer idContato, ContatoCreateDTO contatoAtualizarDTO) throws RegraDeNegocioException {
+        PessoaEntity pessoa = pessoaService.listByIdPessoa(contatoAtualizarDTO.getIdPessoa());
 
-        contatoEntityEntityAtualizado.setTipoContato(contatoCreateDTOAtualizar.getTipoContato());
-        contatoEntityEntityAtualizado.setNumero(contatoCreateDTOAtualizar.getNumero());
-        contatoEntityEntityAtualizado.setDescricao(contatoCreateDTOAtualizar.getDescricao());
+        ContatoEntity contatoEntityRecuperado = contatoByIdContato(idContato);
+        contatoEntityRecuperado.setIdPessoa(contatoAtualizarDTO.getIdPessoa());
+        contatoEntityRecuperado.setTipoContato(contatoAtualizarDTO.getTipoContato());
+        contatoEntityRecuperado.setNumero(contatoAtualizarDTO.getNumero());
+        contatoEntityRecuperado.setDescricao(contatoAtualizarDTO.getDescricao());
 
-        ContatoDTO contatoDTO = objectMapper.convertValue(contatoEntityEntityAtualizado, ContatoDTO.class);
-        emailService.sendEmailAtualizarContato(pessoaEntity);
-        log.info("ContatoEntity atualizado!");
+        log.info("Atualizando contato de " + pessoa.getNome());
+        ContatoDTO contatoDTO = contatoToContatoDto(
+                contatoRepository.save(contatoEntityRecuperado));
+        log.info("Contato atualizado");
+
+        emailService.sendEmailAtualizarContato(pessoa);
+
         return contatoDTO;
     }
 
     public void delete(Integer idContato) throws RegraDeNegocioException {
-        log.info("Deletando contato...");
-        ContatoEntity contatoEntityRecuperado = findByIdContato(idContato);
-        PessoaEntity pessoaEntity = pessoaService.findByIdPessoa(contatoEntityRecuperado.getIdPessoa());
-        contatoRepository.deleteContato(contatoEntityRecuperado);
-        emailService.sendEmailRemoverContato(pessoaEntity);
-        log.info("ContatoEntity deletado!");
+        PessoaEntity pessoa = pessoaService.listByIdPessoa(contatoByIdContato(idContato).getIdPessoa());
+
+        log.warn("Deletando contato...");
+        contatoRepository.delete(contatoByIdContato(idContato));
+        log.info("Contato deletado");
+
+        emailService.sendEmailRemoverContato(pessoa);
     }
 
-    public List<ContatoDTO> list (){
-        log.info("Listar todos os contatos");
-        return contatoRepository.list().stream()
-                .map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoDTO.class))
-                .collect(Collectors.toList());
+    public List<ContatoDTO> listByIdPessoa(Integer idPessoa) {
+        return contatoRepository.findAll().stream()
+                .filter(contato -> contato.getIdPessoa().equals(idPessoa))
+                .map(this::contatoToContatoDto).toList();
     }
 
-    public List<ContatoDTO> listByIdPessoa(Integer idPessoa) throws RegraDeNegocioException {
-        log.info("Listar contato por idPessoa");
-        pessoaService.findByIdPessoa(idPessoa);
-        return contatoRepository.list().stream()
-                .filter(contatoEntity -> contatoEntity.getIdPessoa().equals(idPessoa))
-                .map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoDTO.class))
-                .collect(Collectors.toList());
+
+    public ContatoEntity contatoByIdContato(Integer idContato) throws RegraDeNegocioException {
+        return contatoRepository.findById(idContato)
+                .orElseThrow(() -> new RegraDeNegocioException("O contato informado não existe"));
     }
 
-    //Utilização Interna
-    public ContatoEntity findByIdContato(Integer idContato) throws RegraDeNegocioException {
-        ContatoEntity contatoEntityById = contatoRepository.list().stream()
-                .filter(endereco -> endereco.getIdContato().equals(idContato))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("ContatoEntity não encontrado"));
-        return contatoEntityById;
+    public ContatoEntity contatoCreateDtoToContato(ContatoCreateDTO contatoCreateDTO) {
+        return objectMapper.convertValue(contatoCreateDTO, ContatoEntity.class);
+    }
+
+    public ContatoDTO contatoToContatoDto(ContatoEntity contato) {
+        return objectMapper.convertValue(contato, ContatoDTO.class);
     }
 }
-
