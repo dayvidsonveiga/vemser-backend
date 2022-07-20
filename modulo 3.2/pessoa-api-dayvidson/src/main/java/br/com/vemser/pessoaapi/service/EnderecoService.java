@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -31,42 +33,45 @@ public class EnderecoService {
 
 
     public EnderecoDTO create(EnderecoCreateDTO enderecoCreateDTO, Integer idPessoa) throws RegraDeNegocioException {
-        PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
-        enderecoCreateDTO.setIdPessoa(pessoa.getIdPessoa());
-        log.info("Adicionando endereco...");
+        log.info("Adicionando endereço...");
 
-        EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(
-                enderecoRepository.save(enderecoCreateDtoToEndereco(enderecoCreateDTO)));
+        PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
+
+        Set<PessoaEntity> pessoaEntities = new HashSet<>();
+        pessoaEntities.add(pessoa);
+
+        EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoCreateDTO);
+        enderecoEntity.setPessoaEntities(pessoaEntities);
+        EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoRepository.save(enderecoEntity));
 
         log.info("Endereço adicionado");
+
         emailService.sendEmailAdicionarEndereco(pessoa);
 
         return enderecoDTO;
     }
 
     public EnderecoDTO update(Integer idEndereco, EnderecoCreateDTO enderecoAtualizarDTO) throws RegraDeNegocioException {
-        PessoaEntity pessoa = pessoaService.listByIdPessoa(enderecoAtualizarDTO.getIdPessoa());
-        EnderecoDTO enderecoDTORecuperado = listByIdEndereco(idEndereco);
+        EnderecoEntity enderecoEntityRecuperado = enderecoRepository.findById(idEndereco)
+                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
 
+        EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoAtualizarDTO);
+        enderecoEntity.setIdEndereco(idEndereco);
+        enderecoEntity.setPessoaEntities(enderecoEntityRecuperado.getPessoaEntities());
 
-        log.info("Atualizando endereco de " + pessoa.getNome());
-        EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(
-                enderecoRepository.save(enderecoCreateDtoToEndereco(enderecoAtualizarDTO)));
-        log.info("Endereço atualizado");
-
-        emailService.sendEmailAtualizarEndereco(pessoa);
+        EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoEntity);
 
         return enderecoDTO;
     }
 
     public void delete(Integer idEndereco) throws RegraDeNegocioException {
-        PessoaEntity pessoa = pessoaService.listByIdPessoa(idEndereco);
+        EnderecoEntity enderecoEntityRecuperado = enderecoDTOToEnderecoEntity(listByIdEndereco(idEndereco));
 
         log.warn("Removendo endereço...");
-        enderecoRepository.delete(enderecoDTOToEnderecoEntity(listByIdEndereco(idEndereco)));
-        log.info("Endereço removido");
 
-        emailService.sendEmailRemoverEndereco(pessoa);
+        enderecoRepository.delete(enderecoEntityRecuperado);
+
+        log.info("Endereço removido");
     }
 
     public List<EnderecoDTO> list() {

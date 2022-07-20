@@ -40,8 +40,9 @@ public class ContatoService {
         contatoCreateDTO.setIdPessoa(idPessoa);
 
         log.info("Adicionando contato à pessoa: " + pessoa.getNome());
-        ContatoDTO contatoDTO = contatoToContatoDto(
-                contatoRepository.save(contatoCreateDtoToContato(contatoCreateDTO)));
+
+        ContatoDTO contatoDTO = contatoToContatoDto(contatoRepository.save(contatoCreateDtoToContato(contatoCreateDTO)));
+
         log.info("Contato adicionado");
 
         emailService.sendEmailAdicionarContato(pessoa);
@@ -59,8 +60,9 @@ public class ContatoService {
         contatoEntityRecuperado.setDescricao(contatoAtualizarDTO.getDescricao());
 
         log.info("Atualizando contato de " + pessoa.getNome());
-        ContatoDTO contatoDTO = contatoToContatoDto(
-                contatoRepository.save(contatoEntityRecuperado));
+
+        ContatoDTO contatoDTO = contatoToContatoDto(contatoRepository.save(contatoEntityRecuperado));
+
         log.info("Contato atualizado");
 
         emailService.sendEmailAtualizarContato(pessoa);
@@ -72,15 +74,16 @@ public class ContatoService {
         PessoaEntity pessoa = pessoaService.listByIdPessoa(contatoByIdContato(idContato).getIdPessoa());
 
         log.warn("Deletando contato...");
+
         contatoRepository.delete(contatoByIdContato(idContato));
+
         log.info("Contato deletado");
 
         emailService.sendEmailRemoverContato(pessoa);
     }
 
     public List<ContatoDTO> list() {
-        return contatoRepository.findAll()
-                .stream()
+        return contatoRepository.findAll().stream()
                 .map(this::contatoToContatoDto)
                 .toList();
     }

@@ -56,13 +56,13 @@ public class PetService {
     }
 
     public void delete(Integer idPet) throws RegraDeNegocioException {
-        PetEntity petDeletar = listByIdPet(idPet);
+        PetEntity petEntityRecuperado = listByIdPet(idPet);
 
         log.warn("Deletando...");
 
-        petRepository.delete(petDeletar);
+        petRepository.delete(petEntityRecuperado);
 
-        log.info(petDeletar.getNome() + " removido do banco de dados");
+        log.info(petEntityRecuperado.getNome() + " removido do banco de dados");
     }
 
     public List<PetDTO> list() {

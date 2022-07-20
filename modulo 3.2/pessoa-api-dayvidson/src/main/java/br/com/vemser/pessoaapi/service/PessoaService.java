@@ -44,10 +44,12 @@ public class PessoaService {
         log.info("Atualizando pessoa...");
 
         PessoaEntity pessoaEntity = listByIdPessoa(idPessoa);
+
         pessoaEntity.setNome(pessoaAtualizarDTO.getNome());
         pessoaEntity.setDataNascimento(pessoaAtualizarDTO.getDataNascimento());
         pessoaEntity.setCpf(pessoaAtualizarDTO.getCpf());
         pessoaEntity.setEmail(pessoaAtualizarDTO.getEmail());
+
         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaRepository.save(pessoaEntity));
 
         log.info("Dados de " + pessoaDTO.getNome() + " atualizados no banco de dados");
@@ -55,7 +57,6 @@ public class PessoaService {
         emailService.sendEmailAlterarPessoa(pessoaDTO);
 
         return pessoaDTO;
-
     }
 
     public void delete(Integer idPessoa) throws RegraDeNegocioException {
