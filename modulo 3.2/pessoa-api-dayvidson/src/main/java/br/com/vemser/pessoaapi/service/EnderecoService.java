@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -81,12 +80,9 @@ public class EnderecoService {
 
     }
 
-//    public List<EnderecoDTO> listByIdPessoa(Integer idPessoa) {
-//        return enderecoRepository.list().stream()
-//                .filter(endereco -> endereco.getIdPessoa().equals(idPessoa))
-//                .map(this::enderecoToEnderecoDTO)
-//                .toList();
-//    }
+    public List<EnderecoDTO> listByIdPessoa(Integer idPessoa) {
+        return pessoaService.listPessoaWithEndereco(idPessoa).get(0).getEnderecoDTOS();
+    }
 
     public EnderecoEntity enderecoCreateDtoToEndereco (EnderecoCreateDTO enderecoCreateDTO){
         return objectMapper.convertValue(enderecoCreateDTO, EnderecoEntity.class);

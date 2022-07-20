@@ -1,10 +1,10 @@
 package br.com.vemser.pessoaapi.controller;
 
+import br.com.vemser.pessoaapi.config.Response;
 import br.com.vemser.pessoaapi.dto.PessoaCreateDTO;
 import br.com.vemser.pessoaapi.dto.PessoaDTO;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.config.PropertieReader;
-import br.com.vemser.pessoaapi.service.EmailService;
 import br.com.vemser.pessoaapi.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.mail.MessagingException;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -29,13 +29,6 @@ public class PessoaController {
     @Autowired
     private PessoaService pessoaService;
 
-    //Modelo mais novo
-    //private final PessoaService pessoaService;
-
-    //Modelo mais novo
-    //public PessoaController(PessoaService pessoaService){
-    //this.pessoaService = pessoaService;
-    //}
 
     @Operation(summary = "Adicionar pessoa", description = "Insere pessoa no banco de dados")
     @ApiResponses(
@@ -78,16 +71,6 @@ public class PessoaController {
         pessoaService.delete(id);
     }
 
-//    @GetMapping("/ambiente")
-//    public String getAmbiente() {
-//        return propertieReader.getAmbiente();
-//    }
-//
-//    @GetMapping("/hello") //localhost:8080/pessoa/hello
-//    public String hello() {
-//        return "Hello World!";
-//    }
-
     @Operation(summary = "listar pessoas", description = "Lista todas as pessoas do banco")
     @ApiResponses(
             value = {
@@ -109,11 +92,41 @@ public class PessoaController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Paulo
-    public ResponseEntity<List<PessoaDTO>> listByName(@RequestParam("nome") String nome) throws RegraDeNegocioException {
+    @GetMapping("/byNome/{nome}")
+    public ResponseEntity<List<PessoaDTO>> listByName(@PathVariable("nome") String nome) throws RegraDeNegocioException {
         return new ResponseEntity<>(pessoaService.listByName(nome), HttpStatus.OK);
     }
 
+    @GetMapping("/byCpf/{cpf}")
+    public ResponseEntity<PessoaDTO> listByCpf(@PathVariable("cpf") String cpf) throws RegraDeNegocioException {
+        return new ResponseEntity<>(pessoaService.listByCpf(cpf), HttpStatus.OK);
+    }
 
+    @Response
+    @Operation(summary = "Listar pessoas e pets",
+            description = "Lista todas as pessoas do banco de dados, com seus respectivos pets. " +
+                    "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
+    @GetMapping("/listar-com-pet")
+    public ResponseEntity<List<PessoaDTO>> listPessoaAndPet(@RequestParam(required = false) Integer idPessoa) {
+        return new ResponseEntity<>(pessoaService.listPessoaWithPet(idPessoa), HttpStatus.OK);
+    }
+
+    @Response
+    @Operation(summary = "Listar pessoas e contatos",
+            description = "Lista todas as pessoas do banco de dados, com seus respectivos contatos. " +
+                    "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
+    @GetMapping("/listar-com-contatos")
+    public ResponseEntity<List<PessoaDTO>> listPessoaAndContatos(@RequestParam(required = false) Integer idPessoa) {
+        return new ResponseEntity<>(pessoaService.listPessoaWithContato(idPessoa), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listar pessoas e enderecos",
+            description = "Lista todas as pessoas do banco de dados, com seus respectivos endereços. " +
+                    "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
+    @Response
+    @GetMapping("/listar-com-enderecos")
+    public ResponseEntity<List<PessoaDTO>> listPessoaAndEnderecos(@RequestParam(required = false) Integer idPessoa) {
+        return new ResponseEntity<>(pessoaService.listPessoaWithEndereco(idPessoa), HttpStatus.OK);
+    }
 }
 

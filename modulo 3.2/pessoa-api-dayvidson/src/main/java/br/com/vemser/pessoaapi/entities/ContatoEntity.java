@@ -1,6 +1,7 @@
 package br.com.vemser.pessoaapi.entities;
 
 import br.com.vemser.pessoaapi.enums.TipoContato;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ContatoEntity {
 
     @Id
@@ -18,7 +18,7 @@ public class ContatoEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTATO")
     private Integer idContato;
 
-    @Column(name = "ID_PESSOA")
+    @Column(name = "id_pessoa", insertable = false, updatable = false)
     private Integer idPessoa;
 
     @Column(name = "TIPO")
@@ -29,4 +29,9 @@ public class ContatoEntity {
 
     @Column(name = "DESCRICAO")
     private String descricao;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
+    private PessoaEntity pessoaEntity;
 }
