@@ -31,7 +31,7 @@ public class ContatoEntity {
     private String descricao;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
     private PessoaEntity pessoaEntity;
 }
