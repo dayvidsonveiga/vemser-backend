@@ -25,11 +25,6 @@ public class PetService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public List<PetDTO> list() {
-        return petRepository.findAll()
-                .stream()
-                .map(this::entityToPetDTO).toList();
-    }
 
     public PetDTO post(PetCreateDTO petCreateDTO) throws RegraDeNegocioException {
         log.info("Criando pet...");
@@ -68,6 +63,12 @@ public class PetService {
         petRepository.delete(petDeletar);
 
         log.info(petDeletar.getNome() + " removido do banco de dados");
+    }
+
+    public List<PetDTO> list() {
+        return petRepository.findAll()
+                .stream()
+                .map(this::entityToPetDTO).toList();
     }
 
     public PetEntity listByIdPet(Integer idPet) throws RegraDeNegocioException {

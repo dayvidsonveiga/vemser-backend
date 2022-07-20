@@ -27,17 +27,12 @@ public class EnderecoService {
     private EmailService emailService;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
-    public List<EnderecoDTO> list() {
-        return enderecoRepository.findAll().stream()
-                .map(this::enderecoToEnderecoDTO)
-                .toList();
-    }
 
     public EnderecoDTO create(EnderecoCreateDTO enderecoCreateDTO, Integer idPessoa) throws RegraDeNegocioException {
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
-//        enderecoCreateDTO.setIdPessoa(pessoa.getIdPessoa());
+        enderecoCreateDTO.setIdPessoa(pessoa.getIdPessoa());
         log.info("Adicionando endereco...");
 
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(
@@ -50,28 +45,34 @@ public class EnderecoService {
     }
 
     public EnderecoDTO update(Integer idEndereco, EnderecoCreateDTO enderecoAtualizarDTO) throws RegraDeNegocioException {
-//        PessoaEntity pessoa = pessoaService.listByIdPessoa(enderecoAtualizarDTO.getIdPessoa());
+        PessoaEntity pessoa = pessoaService.listByIdPessoa(enderecoAtualizarDTO.getIdPessoa());
         EnderecoDTO enderecoDTORecuperado = listByIdEndereco(idEndereco);
 
 
-//        log.info("Atualizando endereco de " + pessoa.getNome());
+        log.info("Atualizando endereco de " + pessoa.getNome());
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(
                 enderecoRepository.save(enderecoCreateDtoToEndereco(enderecoAtualizarDTO)));
         log.info("Endereço atualizado");
 
-//        emailService.sendEmailAtualizarEndereco(pessoa);
+        emailService.sendEmailAtualizarEndereco(pessoa);
 
         return enderecoDTO;
     }
 
     public void delete(Integer idEndereco) throws RegraDeNegocioException {
-//        PessoaEntity pessoa = pessoaService.listByIdPessoa(recuperarByIdEndereco(idEndereco).getIdPessoa());
+        PessoaEntity pessoa = pessoaService.listByIdPessoa(idEndereco);
 
         log.warn("Removendo endereço...");
         enderecoRepository.delete(enderecoDTOToEnderecoEntity(listByIdEndereco(idEndereco)));
         log.info("Endereço removido");
 
-//        emailService.sendEmailRemoverEndereco(pessoa);
+        emailService.sendEmailRemoverEndereco(pessoa);
+    }
+
+    public List<EnderecoDTO> list() {
+        return enderecoRepository.findAll().stream()
+                .map(this::enderecoToEnderecoDTO)
+                .toList();
     }
 
     public EnderecoDTO listByIdEndereco(Integer idEndereco) throws RegraDeNegocioException {

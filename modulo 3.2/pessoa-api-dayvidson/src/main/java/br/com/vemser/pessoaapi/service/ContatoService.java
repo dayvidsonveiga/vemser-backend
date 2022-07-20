@@ -34,16 +34,6 @@ public class ContatoService {
     @Autowired
     private ObjectMapper objectMapper;
 
-//    public ContatoService(){
-//        contatoRepository = new ContatoRepository();
-//    }
-
-    public List<ContatoDTO> list() {
-        return contatoRepository.findAll()
-                .stream()
-                .map(this::contatoToContatoDto)
-                .toList();
-    }
 
     public ContatoDTO create(ContatoCreateDTO contatoCreateDTO, Integer idPessoa) throws RegraDeNegocioException {
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
@@ -88,12 +78,19 @@ public class ContatoService {
         emailService.sendEmailRemoverContato(pessoa);
     }
 
+    public List<ContatoDTO> list() {
+        return contatoRepository.findAll()
+                .stream()
+                .map(this::contatoToContatoDto)
+                .toList();
+    }
+
     public List<ContatoDTO> listByIdPessoa(Integer idPessoa) {
         return contatoRepository.findAll().stream()
                 .filter(contato -> contato.getIdPessoa().equals(idPessoa))
-                .map(this::contatoToContatoDto).toList();
+                .map(this::contatoToContatoDto)
+                .toList();
     }
-
 
     public ContatoEntity contatoByIdContato(Integer idContato) throws RegraDeNegocioException {
         return contatoRepository.findById(idContato)
