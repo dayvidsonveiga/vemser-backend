@@ -31,7 +31,7 @@ public class PetService {
 
         PetEntity petEntity = createDtoToEntity(petCreateDTO);
 
-        petEntity.setPessoaEntity(pessoaService.listByIdPessoa(petEntity.getIdPessoa()));
+        petEntity.setPessoa(pessoaService.listByIdPessoa(petEntity.getIdPessoa()));
 
         PetDTO petDTO = entityToPetDTO(petRepository.save(petEntity));
 
@@ -47,7 +47,7 @@ public class PetService {
 
         petEntity.setIdPet(idPet);
 
-        petEntity.setPessoaEntity(pessoaService.listByIdPessoa(petAtualizarDTO.getIdPessoa()));
+        petEntity.setPessoa(pessoaService.listByIdPessoa(petAtualizarDTO.getIdPessoa()));
 
         PetDTO petDTO = entityToPetDTO(petRepository.save(petEntity));
 

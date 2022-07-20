@@ -34,7 +34,7 @@ public class PessoaEntity {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "pessoaEntity",
+            mappedBy = "pessoa",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private Set<ContatoEntity> contatoEntities;
@@ -49,5 +49,5 @@ public class PessoaEntity {
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pet", referencedColumnName = "id_pet")
-    private PetEntity petEntity;
+    private PetEntity pet;
 }

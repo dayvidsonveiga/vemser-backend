@@ -49,5 +49,5 @@ public class EnderecoEntity {
     @JoinTable(name = "Pessoa_X_Pessoa_Endereco",
             joinColumns = @JoinColumn(name = "id_endereco"),
             inverseJoinColumns = @JoinColumn(name = "id_pessoa"))
-    private Set<PessoaEntity> pessoaEntities;
+    private Set<PessoaEntity> pessoas;
 }

@@ -37,6 +37,7 @@ public class ContatoService {
 
     public ContatoDTO create(ContatoCreateDTO contatoCreateDTO, Integer idPessoa) throws RegraDeNegocioException {
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
+
         contatoCreateDTO.setIdPessoa(idPessoa);
 
         log.info("Adicionando contato à pessoa: " + pessoa.getNome());

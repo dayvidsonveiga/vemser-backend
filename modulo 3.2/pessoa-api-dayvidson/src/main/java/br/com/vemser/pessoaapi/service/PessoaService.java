@@ -138,14 +138,14 @@ public class PessoaService {
             return pessoaRepository.findById(idPessoa)
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPetEntity()));
+                        pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPet()));
                         return pessoaDTO;
                     }).stream().toList();
         } else {
             return pessoaRepository.findAll().stream()
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPetEntity()));
+                        pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPet()));
                         return pessoaDTO;
                     }).toList();
         }

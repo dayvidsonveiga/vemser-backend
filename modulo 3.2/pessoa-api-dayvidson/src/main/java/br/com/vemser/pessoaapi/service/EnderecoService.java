@@ -37,11 +37,11 @@ public class EnderecoService {
 
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
 
-        Set<PessoaEntity> pessoaEntities = new HashSet<>();
-        pessoaEntities.add(pessoa);
+        Set<PessoaEntity> pessoas = new HashSet<>();
+        pessoas.add(pessoa);
 
         EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoCreateDTO);
-        enderecoEntity.setPessoaEntities(pessoaEntities);
+        enderecoEntity.setPessoas(pessoas);
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoRepository.save(enderecoEntity));
 
         log.info("Endereço adicionado");
@@ -57,7 +57,7 @@ public class EnderecoService {
 
         EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoAtualizarDTO);
         enderecoEntity.setIdEndereco(idEndereco);
-        enderecoEntity.setPessoaEntities(enderecoEntityRecuperado.getPessoaEntities());
+        enderecoEntity.setPessoas(enderecoEntityRecuperado.getPessoas());
 
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoEntity);
 

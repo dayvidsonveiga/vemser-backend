@@ -34,6 +34,6 @@ public class PetEntity {
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
-    private PessoaEntity pessoaEntity;
+    private PessoaEntity pessoa;
 }
 
