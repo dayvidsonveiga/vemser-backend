@@ -1,7 +1,9 @@
 package br.com.vemser.pessoaapi.service;
 
+import br.com.vemser.pessoaapi.dto.PessoaCreateDTO;
 import br.com.vemser.pessoaapi.dto.PetCreateDTO;
 import br.com.vemser.pessoaapi.dto.PetDTO;
+import br.com.vemser.pessoaapi.entities.PessoaEntity;
 import br.com.vemser.pessoaapi.entities.PetEntity;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.repository.PetRepository;
@@ -27,29 +29,38 @@ public class PetService {
 
 
     public PetDTO post(PetCreateDTO petCreateDTO) throws RegraDeNegocioException {
-        log.info("Criando pet...");
-
         PetEntity petEntity = createDtoToEntity(petCreateDTO);
+        PessoaEntity pessoaEntityRecuperada = pessoaService.listByIdPessoa(petEntity.getIdPessoa());
 
-        petEntity.setPessoa(pessoaService.listByIdPessoa(petEntity.getIdPessoa()));
-
+        log.info("Criando pet...");
+        petEntity.setPessoa(pessoaEntityRecuperada);
         PetDTO petDTO = entityToPetDTO(petRepository.save(petEntity));
 
-        log.info(petDTO.getNome() + " adicionado(a) ao banco de dados");
+        log.info(petDTO.getNome() + " adicionado ao banco de dados");
 
         return petDTO;
     }
 
     public PetDTO put(Integer idPet, PetCreateDTO petAtualizarDTO) throws RegraDeNegocioException {
+        PetEntity petRecuperado = petRepository.findById(idPet).orElseThrow(() -> new RegraDeNegocioException("Pet não encontrado"));
+        PessoaEntity pessoaEntity = petRecuperado.getPessoa();
+        pessoaEntity.setPet(null);
+
+        PessoaEntity pessoaRecuperada = pessoaService.listByIdPessoa(petRecuperado.getIdPessoa());
+
         log.info("Atualizando pet...");
+        petRecuperado.setTipoPet(petAtualizarDTO.getTipoPet());
+        petRecuperado.setNome(petAtualizarDTO.getNome());
+        petRecuperado.setPessoa(pessoaService.listByIdPessoa(petAtualizarDTO.getIdPessoa()));
+        petRecuperado.setIdPessoa(petAtualizarDTO.getIdPessoa());
+        pessoaRecuperada.setPet(petRecuperado);
+        pessoaService.salvar(pessoaRecuperada);
 
-        PetEntity petEntity = createDtoToEntity(petAtualizarDTO);
+        if (!pessoaRecuperada.getIdPessoa().equals(pessoaEntity.getIdPessoa())) {
+            pessoaService.update(pessoaEntity.getIdPessoa(), objectMapper.convertValue(pessoaEntity, PessoaCreateDTO.class));
+        }
 
-        petEntity.setIdPet(idPet);
-
-        petEntity.setPessoa(pessoaService.listByIdPessoa(petAtualizarDTO.getIdPessoa()));
-
-        PetDTO petDTO = entityToPetDTO(petRepository.save(petEntity));
+        PetDTO petDTO = entityToPetDTO(petRepository.save(petRecuperado));
 
         log.info("Dados de " + petDTO.getNome() + " atualizados no banco de dados");
         return petDTO;

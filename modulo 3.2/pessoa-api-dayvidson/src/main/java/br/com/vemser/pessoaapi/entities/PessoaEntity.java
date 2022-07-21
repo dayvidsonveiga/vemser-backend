@@ -35,8 +35,7 @@ public class PessoaEntity {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "pessoa",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private Set<ContatoEntity> contatoEntities;
 
     @JsonIgnore

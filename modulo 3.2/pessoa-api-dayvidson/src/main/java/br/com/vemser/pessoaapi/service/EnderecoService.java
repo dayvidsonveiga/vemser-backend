@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,11 +36,10 @@ public class EnderecoService {
 
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
 
-        Set<PessoaEntity> pessoas = new HashSet<>();
-        pessoas.add(pessoa);
-
         EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoCreateDTO);
-        enderecoEntity.setPessoas(pessoas);
+
+        enderecoEntity.setPessoas(Set.of(pessoa));
+
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoRepository.save(enderecoEntity));
 
         log.info("Endereço adicionado");
@@ -53,14 +50,15 @@ public class EnderecoService {
     }
 
     public EnderecoDTO update(Integer idEndereco, EnderecoCreateDTO enderecoAtualizarDTO) throws RegraDeNegocioException {
-        EnderecoEntity enderecoEntityRecuperado = enderecoRepository.findById(idEndereco)
+        EnderecoEntity enderecoRecuperado = enderecoRepository.findById(idEndereco)
                 .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
 
+        log.info("Atualizando endereco  " + idEndereco);
         EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoAtualizarDTO);
         enderecoEntity.setIdEndereco(idEndereco);
-        enderecoEntity.setPessoas(enderecoEntityRecuperado.getPessoas());
-
+        enderecoEntity.setPessoas(enderecoRecuperado.getPessoas());
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoRepository.save(enderecoEntity));
+        log.info("Endereço atualizado");
 
         return enderecoDTO;
     }

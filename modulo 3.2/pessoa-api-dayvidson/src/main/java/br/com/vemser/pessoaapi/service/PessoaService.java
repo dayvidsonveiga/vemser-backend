@@ -72,6 +72,10 @@ public class PessoaService {
         emailService.sendEmailDeletarPessoa(pessoaRecuperada);
     }
 
+    public void salvar(PessoaEntity pessoaEntity) {
+        pessoaRepository.save(pessoaEntity);
+    }
+
     public List<PessoaDTO> list() {
         return pessoaRepository.findAll()
                 .stream()
