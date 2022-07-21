@@ -32,7 +32,7 @@ public class PetEntity {
     private TipoPet tipoPet;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pessoa", referencedColumnName = "id_pessoa")
     private PessoaEntity pessoa;
 }
