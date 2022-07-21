@@ -29,9 +29,12 @@ public class PetService {
 
 
     public PetDTO post(PetCreateDTO petCreateDTO) throws RegraDeNegocioException {
-        PetEntity petEntity = createDtoToEntity(petCreateDTO);
-        PessoaEntity pessoaEntityRecuperada = pessoaService.listByIdPessoa(petEntity.getIdPessoa());
+        PessoaEntity pessoaEntityRecuperada = pessoaService.listByIdPessoa(petCreateDTO.getIdPessoa());
+        if (pessoaEntityRecuperada.getPet() != null) {
+            throw new RegraDeNegocioException("Já existe um pet nessa pessoa");
+        }
 
+        PetEntity petEntity = createDtoToEntity(petCreateDTO);
         log.info("Criando pet...");
         petEntity.setPessoa(pessoaEntityRecuperada);
         PetDTO petDTO = entityToPetDTO(petRepository.save(petEntity));
@@ -42,28 +45,16 @@ public class PetService {
     }
 
     public PetDTO put(Integer idPet, PetCreateDTO petAtualizarDTO) throws RegraDeNegocioException {
-        PetEntity petRecuperado = petRepository.findById(idPet).orElseThrow(() -> new RegraDeNegocioException("Pet não encontrado"));
-        PessoaEntity pessoaEntity = petRecuperado.getPessoa();
-        pessoaEntity.setPet(null);
+        PessoaEntity pessoaRecuperada = pessoaService.listByIdPessoa(petAtualizarDTO.getIdPessoa());
+        PetEntity petEntityRecuperado = listByIdPet(idPet);
 
-        PessoaEntity pessoaRecuperada = pessoaService.listByIdPessoa(petRecuperado.getIdPessoa());
+        petEntityRecuperado.setNome(petAtualizarDTO.getNome());
+        petEntityRecuperado.setTipoPet(petAtualizarDTO.getTipoPet());
+        petEntityRecuperado.setPessoa(pessoaRecuperada);
 
-        log.info("Atualizando pet...");
-        petRecuperado.setTipoPet(petAtualizarDTO.getTipoPet());
-        petRecuperado.setNome(petAtualizarDTO.getNome());
-        petRecuperado.setPessoa(pessoaService.listByIdPessoa(petAtualizarDTO.getIdPessoa()));
-        petRecuperado.setIdPessoa(petAtualizarDTO.getIdPessoa());
-        pessoaRecuperada.setPet(petRecuperado);
-        pessoaService.salvar(pessoaRecuperada);
+        pessoaRecuperada.setPet(petEntityRecuperado);
 
-        if (!pessoaRecuperada.getIdPessoa().equals(pessoaEntity.getIdPessoa())) {
-            pessoaService.update(pessoaEntity.getIdPessoa(), objectMapper.convertValue(pessoaEntity, PessoaCreateDTO.class));
-        }
-
-        PetDTO petDTO = entityToPetDTO(petRepository.save(petRecuperado));
-
-        log.info("Dados de " + petDTO.getNome() + " atualizados no banco de dados");
-        return petDTO;
+        return entityToPetDTO(petRepository.save(petEntityRecuperado));
     }
 
     public void delete(Integer idPet) throws RegraDeNegocioException {
