@@ -40,14 +40,14 @@ public class PessoaEntity {
     private Set<ContatoEntity> contatoEntities;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Pessoa_X_Pessoa_Endereco",
             joinColumns = @JoinColumn(name = "id_pessoa"),
             inverseJoinColumns = @JoinColumn(name = "id_endereco"))
     private Set<EnderecoEntity> enderecoEntities;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pet", referencedColumnName = "id_pet")
     private PetEntity pet;
 }

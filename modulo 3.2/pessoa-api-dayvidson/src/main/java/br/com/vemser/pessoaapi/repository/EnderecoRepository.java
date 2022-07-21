@@ -15,4 +15,10 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Intege
             " from ENDERECO_PESSOA e" +
             " where e.pais = :pais")
     List<EnderecoEntity> listEnderecoByPais(@Param("pais") String pais);
+
+    @Query("select e" +
+            " from ENDERECO_PESSOA e " +
+            " join e.pessoas p " +
+            " where p.idPessoa = :idPessoa")
+    List<EnderecoEntity> enderecoByIdPessoa(@Param("idPessoa") Integer idPessoa);
 }

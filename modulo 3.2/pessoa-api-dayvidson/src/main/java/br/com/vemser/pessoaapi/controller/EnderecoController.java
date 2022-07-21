@@ -106,7 +106,7 @@ public class EnderecoController {
     )
     @GetMapping("/{idPessoa}/pessoa")
     public ResponseEntity<List<EnderecoDTO>> listByIdPessoa(@PathVariable("idPessoa") Integer idPessoa) {
-        return new ResponseEntity<>(enderecoService.listByIdPessoa(idPessoa), HttpStatus.OK);
+        return new ResponseEntity<>(enderecoService.listByIdPessoa2(idPessoa), HttpStatus.OK);
     }
 
     @GetMapping("/pais")

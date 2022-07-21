@@ -3,6 +3,7 @@ package br.com.vemser.pessoaapi.controller;
 import br.com.vemser.pessoaapi.config.Response;
 import br.com.vemser.pessoaapi.dto.PessoaCreateDTO;
 import br.com.vemser.pessoaapi.dto.PessoaDTO;
+import br.com.vemser.pessoaapi.dto.PessoaRelatorioDTO;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.config.PropertieReader;
 import br.com.vemser.pessoaapi.service.PessoaService;
@@ -40,8 +41,6 @@ public class PessoaController {
     )
     @PostMapping
     public ResponseEntity<PessoaDTO> create(@RequestBody @Valid PessoaCreateDTO pessoa) throws RegraDeNegocioException {
-        //return ResponseEntity.ok(pessoaService.create(pessoa));
-        //Um ou outro modo
         return new ResponseEntity<>(pessoaService.create(pessoa), HttpStatus.CREATED);
     }
 
@@ -107,7 +106,7 @@ public class PessoaController {
             description = "Lista todas as pessoas do banco de dados, com seus respectivos pets. " +
                     "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
     @GetMapping("/listar-com-pet")
-    public ResponseEntity<List<PessoaDTO>> listPessoaAndPet(@RequestParam(required = false) Integer idPessoa) {
+    public ResponseEntity<List<PessoaDTO>> listPessoaWithPet(@RequestParam(required = false) Integer idPessoa) {
         return new ResponseEntity<>(pessoaService.listPessoaWithPet(idPessoa), HttpStatus.OK);
     }
 
@@ -116,7 +115,7 @@ public class PessoaController {
             description = "Lista todas as pessoas do banco de dados, com seus respectivos contatos. " +
                     "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
     @GetMapping("/listar-com-contatos")
-    public ResponseEntity<List<PessoaDTO>> listPessoaAndContatos(@RequestParam(required = false) Integer idPessoa) {
+    public ResponseEntity<List<PessoaDTO>> listPessoaWithContatos(@RequestParam(required = false) Integer idPessoa) {
         return new ResponseEntity<>(pessoaService.listPessoaWithContato(idPessoa), HttpStatus.OK);
     }
 
@@ -125,8 +124,26 @@ public class PessoaController {
                     "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
     @Response
     @GetMapping("/listar-com-enderecos")
-    public ResponseEntity<List<PessoaDTO>> listPessoaAndEnderecos(@RequestParam(required = false) Integer idPessoa) {
+    public ResponseEntity<List<PessoaDTO>> listPessoaWithEnderecos(@RequestParam(required = false) Integer idPessoa) {
         return new ResponseEntity<>(pessoaService.listPessoaWithEndereco(idPessoa), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listar pessoas com seu dados completos",
+            description = "Lista todas as pessoas do banco de dados, com seus respectivos endereços, contatos e pet. " +
+                    "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
+    @Response
+    @GetMapping("/listar-pessoa-completa")
+    public ResponseEntity<List<PessoaDTO>> listPessoaCompleta(@RequestParam(required = false) Integer idPessoa) {
+        return new ResponseEntity<>(pessoaService.listPessoaCompleta(idPessoa), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listar pessoas com seu dados personalizados",
+            description = "Lista todas as pessoas do banco de dados, com seus respectivos id, nome, email, numero, cep, cidade, estado, pais, e nome do pet. " +
+                    "Caso seja especificada uma pessoa (por Query Param), traz somente as informações referentes à ela")
+    @Response
+    @GetMapping("/listar-pessoa-relatorio")
+    public ResponseEntity<List<PessoaRelatorioDTO>> listPessoaRelatorio(@RequestParam(required = false) Integer idPessoa) {
+        return new ResponseEntity<>(pessoaService.listPessoaRelatorio(idPessoa), HttpStatus.OK);
     }
 }
 

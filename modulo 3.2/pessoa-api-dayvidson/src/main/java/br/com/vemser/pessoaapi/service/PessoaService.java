@@ -41,14 +41,15 @@ public class PessoaService {
     }
 
     public PessoaDTO update(Integer idPessoa, PessoaCreateDTO pessoaAtualizarDTO) throws RegraDeNegocioException {
+        PessoaEntity pessoaRecuperada = listByIdPessoa(idPessoa);
+
         log.info("Atualizando pessoa...");
 
-        PessoaEntity pessoaEntity = listByIdPessoa(idPessoa);
+        PessoaEntity pessoaEntity = pessoaCreateDtoToPessoaEntity(pessoaAtualizarDTO);
 
-        pessoaEntity.setNome(pessoaAtualizarDTO.getNome());
-        pessoaEntity.setDataNascimento(pessoaAtualizarDTO.getDataNascimento());
-        pessoaEntity.setCpf(pessoaAtualizarDTO.getCpf());
-        pessoaEntity.setEmail(pessoaAtualizarDTO.getEmail());
+        pessoaEntity.setIdPessoa(idPessoa);
+        pessoaEntity.setContatoEntities(pessoaRecuperada.getContatoEntities());
+        pessoaEntity.setEnderecoEntities(pessoaRecuperada.getEnderecoEntities());
 
         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaRepository.save(pessoaEntity));
 
@@ -60,15 +61,15 @@ public class PessoaService {
     }
 
     public void delete(Integer idPessoa) throws RegraDeNegocioException {
-        PessoaEntity pessoaDeletar = listByIdPessoa(idPessoa);
+        PessoaEntity pessoaRecuperada = listByIdPessoa(idPessoa);
 
         log.warn("Deletando...");
 
-        pessoaRepository.delete(pessoaDeletar);
+        pessoaRepository.delete(pessoaRecuperada);
         
-        log.info(pessoaDeletar.getNome() + " removida do banco de dados");
+        log.info(pessoaRecuperada.getNome() + " removida do banco de dados");
 
-        emailService.sendEmailDeletarPessoa(pessoaDeletar);
+        emailService.sendEmailDeletarPessoa(pessoaRecuperada);
     }
 
     public List<PessoaDTO> list() {
@@ -149,6 +150,36 @@ public class PessoaService {
                         return pessoaDTO;
                     }).toList();
         }
+    }
+
+    public List<PessoaDTO> listPessoaCompleta(Integer idPessoa) {
+        if (idPessoa != null) {
+            return pessoaRepository.findById(idPessoa)
+                    .map(pessoaEntity -> {
+                        PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
+                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatoEntities().stream()
+                                .map(this::contatoToContatoDto).toList());
+                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecoEntities().stream()
+                                .map(this::enderecoToEnderecoDTO).toList());
+                        pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPet()));
+                        return pessoaDTO;
+                    }).stream().toList();
+        } else {
+            return pessoaRepository.findAll().stream()
+                    .map(pessoaEntity -> {
+                        PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
+                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatoEntities().stream()
+                                .map(this::contatoToContatoDto).toList());
+                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecoEntities().stream()
+                                .map(this::enderecoToEnderecoDTO).toList());
+                        pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPet()));
+                        return pessoaDTO;
+                    }).toList();
+        }
+    }
+
+    public List<PessoaRelatorioDTO> listPessoaRelatorio(Integer idPessoa) {
+        return pessoaRepository.listPessoaByRelatorio(idPessoa);
     }
 
 

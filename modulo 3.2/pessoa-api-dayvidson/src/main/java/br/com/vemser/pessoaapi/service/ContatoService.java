@@ -6,14 +6,12 @@ import br.com.vemser.pessoaapi.entities.ContatoEntity;
 import br.com.vemser.pessoaapi.entities.PessoaEntity;
 import br.com.vemser.pessoaapi.exceptions.RegraDeNegocioException;
 import br.com.vemser.pessoaapi.repository.ContatoRepository;
-import br.com.vemser.pessoaapi.repository.PessoaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -26,9 +24,6 @@ public class ContatoService {
     private PessoaService pessoaService;
 
     @Autowired
-    private PessoaRepository pessoaRepository;
-
-    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -37,11 +32,9 @@ public class ContatoService {
 
     public ContatoDTO create(ContatoCreateDTO contatoCreateDTO, Integer idPessoa) throws RegraDeNegocioException {
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
-
         contatoCreateDTO.setIdPessoa(idPessoa);
 
         log.info("Adicionando contato à pessoa: " + pessoa.getNome());
-
         ContatoDTO contatoDTO = contatoToContatoDto(contatoRepository.save(contatoCreateDtoToContato(contatoCreateDTO)));
 
         log.info("Contato adicionado");

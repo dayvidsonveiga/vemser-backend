@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class EnderecoService {
         enderecoEntity.setIdEndereco(idEndereco);
         enderecoEntity.setPessoas(enderecoEntityRecuperado.getPessoas());
 
-        EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoEntity);
+        EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoRepository.save(enderecoEntity));
 
         return enderecoDTO;
     }
@@ -88,6 +89,11 @@ public class EnderecoService {
 
     public List<EnderecoDTO> listByIdPessoa(Integer idPessoa) {
         return pessoaService.listPessoaWithEndereco(idPessoa).get(0).getEnderecoDTOS();
+    }
+
+    public List<EnderecoDTO> listByIdPessoa2(Integer idPessoa) {
+        return enderecoRepository.enderecoByIdPessoa(idPessoa).stream()
+                .map(enderecoEntity -> enderecoToEnderecoDTO(enderecoEntity)).toList();
     }
 
     public EnderecoEntity enderecoCreateDtoToEndereco (EnderecoCreateDTO enderecoCreateDTO){
