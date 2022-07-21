@@ -89,6 +89,9 @@ public class ContatoService {
                 .toList();
     }
 
+
+    // Utilidade interna
+
     public ContatoEntity contatoByIdContato(Integer idContato) throws RegraDeNegocioException {
         return contatoRepository.findById(idContato)
                 .orElseThrow(() -> new RegraDeNegocioException("O contato informado não existe"));

@@ -29,8 +29,8 @@ public interface PessoaRepository extends JpaRepository<PessoaEntity, Integer> {
             "a.nome" +
             ")" +
             " from PESSOA p" +
-            " left join p.contatoEntities c " +
-            " left join p.enderecoEntities e " +
+            " left join p.contatos c " +
+            " left join p.enderecos e " +
             " left join p.pet a " +
             " where (:idPessoa is null OR p.idPessoa = :idPessoa)")
     List<PessoaRelatorioDTO> listPessoaByRelatorio(@Param("idPessoa")Integer idPessoa);

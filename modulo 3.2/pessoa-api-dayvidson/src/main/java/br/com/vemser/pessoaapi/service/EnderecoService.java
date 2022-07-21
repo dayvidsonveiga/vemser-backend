@@ -35,23 +35,18 @@ public class EnderecoService {
         log.info("Adicionando endereço...");
 
         PessoaEntity pessoa = pessoaService.listByIdPessoa(idPessoa);
-
         EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoCreateDTO);
-
         enderecoEntity.setPessoas(Set.of(pessoa));
 
         EnderecoDTO enderecoDTO = enderecoToEnderecoDTO(enderecoRepository.save(enderecoEntity));
-
         log.info("Endereço adicionado");
 
         emailService.sendEmailAdicionarEndereco(pessoa);
-
         return enderecoDTO;
     }
 
     public EnderecoDTO update(Integer idEndereco, EnderecoCreateDTO enderecoAtualizarDTO) throws RegraDeNegocioException {
-        EnderecoEntity enderecoRecuperado = enderecoRepository.findById(idEndereco)
-                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
+        EnderecoEntity enderecoRecuperado = findByIdEndereco(idEndereco);
 
         log.info("Atualizando endereco  " + idEndereco);
         EnderecoEntity enderecoEntity = enderecoCreateDtoToEndereco(enderecoAtualizarDTO);
@@ -92,6 +87,15 @@ public class EnderecoService {
     public List<EnderecoDTO> listByIdPessoa2(Integer idPessoa) {
         return enderecoRepository.enderecoByIdPessoa(idPessoa).stream()
                 .map(enderecoEntity -> enderecoToEnderecoDTO(enderecoEntity)).toList();
+    }
+
+
+    // Utilização interna
+
+    public EnderecoEntity findByIdEndereco(Integer id) throws RegraDeNegocioException {
+        return enderecoRepository.findById(id).stream()
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
     }
 
     public EnderecoEntity enderecoCreateDtoToEndereco (EnderecoCreateDTO enderecoCreateDTO){

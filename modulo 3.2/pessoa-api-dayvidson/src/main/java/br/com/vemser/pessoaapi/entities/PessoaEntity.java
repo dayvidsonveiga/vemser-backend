@@ -36,17 +36,17 @@ public class PessoaEntity {
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "pessoa",
             cascade = CascadeType.ALL)
-    private Set<ContatoEntity> contatoEntities;
+    private Set<ContatoEntity> contatos;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Pessoa_X_Pessoa_Endereco",
             joinColumns = @JoinColumn(name = "id_pessoa"),
             inverseJoinColumns = @JoinColumn(name = "id_endereco"))
-    private Set<EnderecoEntity> enderecoEntities;
+    private Set<EnderecoEntity> enderecos;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_pet", referencedColumnName = "id_pet")
     private PetEntity pet;
 }

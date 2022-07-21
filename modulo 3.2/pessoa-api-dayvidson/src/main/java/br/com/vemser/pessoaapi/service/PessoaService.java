@@ -48,8 +48,8 @@ public class PessoaService {
         PessoaEntity pessoaEntity = pessoaCreateDtoToPessoaEntity(pessoaAtualizarDTO);
 
         pessoaEntity.setIdPessoa(idPessoa);
-        pessoaEntity.setContatoEntities(pessoaRecuperada.getContatoEntities());
-        pessoaEntity.setEnderecoEntities(pessoaRecuperada.getEnderecoEntities());
+        pessoaEntity.setContatos(pessoaRecuperada.getContatos());
+        pessoaEntity.setEnderecos(pessoaRecuperada.getEnderecos());
 
         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaRepository.save(pessoaEntity));
 
@@ -102,7 +102,7 @@ public class PessoaService {
             return pessoaRepository.findById(idPessoa)
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecoEntities().stream()
+                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecos().stream()
                                 .map(this::enderecoToEnderecoDTO).toList());
                         return pessoaDTO;
                     }).stream().toList();
@@ -110,7 +110,7 @@ public class PessoaService {
             return pessoaRepository.findAll().stream()
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecoEntities().stream()
+                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecos().stream()
                                 .map(this::enderecoToEnderecoDTO)
                                 .toList());
                         return pessoaDTO;
@@ -123,7 +123,7 @@ public class PessoaService {
             return pessoaRepository.findById(idPessoa)
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatoEntities().stream()
+                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatos().stream()
                                 .map(this::contatoToContatoDto).toList());
                         return pessoaDTO;
                     }).stream().toList();
@@ -131,7 +131,7 @@ public class PessoaService {
             return pessoaRepository.findAll().stream()
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatoEntities().stream()
+                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatos().stream()
                                 .map(this::contatoToContatoDto).toList());
                         return pessoaDTO;
                     }).toList();
@@ -161,9 +161,9 @@ public class PessoaService {
             return pessoaRepository.findById(idPessoa)
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatoEntities().stream()
+                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatos().stream()
                                 .map(this::contatoToContatoDto).toList());
-                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecoEntities().stream()
+                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecos().stream()
                                 .map(this::enderecoToEnderecoDTO).toList());
                         pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPet()));
                         return pessoaDTO;
@@ -172,9 +172,9 @@ public class PessoaService {
             return pessoaRepository.findAll().stream()
                     .map(pessoaEntity -> {
                         PessoaDTO pessoaDTO = entityToPessoaDTO(pessoaEntity);
-                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatoEntities().stream()
+                        pessoaDTO.setContatoDTOS(pessoaEntity.getContatos().stream()
                                 .map(this::contatoToContatoDto).toList());
-                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecoEntities().stream()
+                        pessoaDTO.setEnderecoDTOS(pessoaEntity.getEnderecos().stream()
                                 .map(this::enderecoToEnderecoDTO).toList());
                         pessoaDTO.setPetDTO(petToPetDTO(pessoaEntity.getPet()));
                         return pessoaDTO;
