@@ -1,8 +1,6 @@
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Scanner;
 
-public class ex03 {
+public class Ex03 {
     public static void main(String[] args) {
 
         LocalDateTime dataAtual = LocalDateTime.now();

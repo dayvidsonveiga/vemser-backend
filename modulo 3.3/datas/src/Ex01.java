@@ -3,7 +3,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class ex01 {
+public class Ex01 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         LocalDate dataAtual = LocalDate.now();

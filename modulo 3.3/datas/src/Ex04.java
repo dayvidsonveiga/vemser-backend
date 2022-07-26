@@ -3,7 +3,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class ex04 {
+public class Ex04 {
     public static void main(String[] args) {
 
         LocalDateTime show = LocalDateTime.of(2024, 9, 14, 18, 30);
