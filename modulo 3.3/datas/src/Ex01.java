@@ -5,16 +5,18 @@ import java.util.Scanner;
 
 public class Ex01 {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        LocalDate dataAtual = LocalDate.now();
-
-        System.out.println("Informe a sua data de aniversário, conforme modelo (DD/MM/YYYY)");
-        String dataAniversario = scanner.nextLine();
-        LocalDate dataFormatada = LocalDate.parse(dataAniversario, DateTimeFormatter.ofPattern("dd/MM/yyyy")).withYear(LocalDate.now().getYear());
-
-        Period period = Period.between(dataAtual, dataFormatada.plusYears(1));
-
-        System.out.println("Restam " + period.getMonths() + " meses e " + period.getDays() + " dias para seu aniversário");
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Informe a data do seu aniversário");
+        LocalDate dataAniversario = LocalDate.parse(sc.nextLine());
+        LocalDate diaAtual = LocalDate.now();
+        Period periodo;
+        if (dataAniversario.withYear(diaAtual.getYear()).isBefore(diaAtual)){
+            //Adiciona um ano para que não seja negativo o valor do retorno
+            periodo = Period.between(diaAtual, dataAniversario.withYear(diaAtual.plusYears(1).getYear()));
+        } else {
+            periodo = Period.between(diaAtual, dataAniversario.withYear(diaAtual.getYear()));
+        }
+        System.out.println("Faltam " + periodo.getMonths() + " meses e " + periodo.getDays() + " dias para o seu próximo aniversário!");
+        sc.close();
     }
 }
