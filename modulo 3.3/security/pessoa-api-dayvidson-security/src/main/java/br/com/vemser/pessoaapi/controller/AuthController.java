@@ -49,7 +49,8 @@ public class AuthController {
     }
 
     @PostMapping("/cadastro-usuario")
-    public ResponseEntity<String> saveUsuario(@RequestBody @Valid LoginDTO loginDTO) {
-        return new ResponseEntity<>(usuarioService.saveUsuario(loginDTO).getLogin(), HttpStatus.CREATED);
+    public ResponseEntity<LoginDTO> saveUsuario(@RequestBody @Valid LoginDTO loginDTO) {
+        return new ResponseEntity<>(usuarioService.saveUsuario(loginDTO), HttpStatus.CREATED);
     }
+
 }

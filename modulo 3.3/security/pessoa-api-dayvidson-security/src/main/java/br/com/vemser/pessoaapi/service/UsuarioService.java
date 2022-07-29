@@ -21,12 +21,14 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public UsuarioEntity saveUsuario(LoginDTO loginDTO) {
+    public LoginDTO saveUsuario(LoginDTO loginDTO) {
         UsuarioEntity usuarioEntity = createToEntity(loginDTO);
 
         usuarioEntity.setSenha(passwordEncoder.encode(usuarioEntity.getPassword()));
 
-        return usuarioRepository.save(usuarioEntity);
+        usuarioRepository.save(usuarioEntity);
+
+        return loginDTO;
     }
 
     public UsuarioEntity createToEntity(LoginDTO loginDTO) {
