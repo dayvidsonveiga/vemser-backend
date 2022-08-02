@@ -11,213 +11,165 @@ public class ContaTest {
     //CONTA CORRENTE
 
     @Test
-    public void saqueContaCorrente() {
-        ContaCorrente contaCorrente = criarContaCorrente();
-
-        boolean saque = contaCorrente.sacar(500);
-
-        Assertions.assertTrue(saque);
-        Assertions.assertEquals(1500.0, contaCorrente.getSaldo());
-    }
-
-    @Test
-    public void saqueContaCorrenteSemSaldo() {
-        ContaCorrente contaCorrente = criarContaCorrente();
-
-        boolean saque = contaCorrente.sacar(5000);
-
-        Assertions.assertFalse(saque);
-    }
-
-    @Test
-    public void transferenciaContaCorrente() {
-        ContaCorrente contaCorrente = criarContaCorrente();
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-
-        boolean transferencia = contaCorrente.transferir(contaPoupanca, 500.0);
-
-        Assertions.assertTrue(transferencia);
-        Assertions.assertEquals(1500.0, contaCorrente.getSaldo());
-        Assertions.assertEquals(2500.0, contaPoupanca.getSaldo());
-    }
-
-    @Test
-    public void transferenciaContaCorrenteSemSaldo() {
-        ContaCorrente contaCorrente = criarContaCorrente();
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-
-        boolean transferencia = contaCorrente.transferir(contaPoupanca, 5000.0);
-
-        Assertions.assertFalse(transferencia);
-    }
-
-    @Test
-    public void depositoContaCorrente() {
-        ContaCorrente contaCorrente = criarContaCorrente();
-
-        boolean saque = contaCorrente.depositar(500);
-
-        Assertions.assertTrue(saque);
-        Assertions.assertEquals(2500.0, contaCorrente.getSaldo());
-    }
-
-    @Test
-    public void depositoContaCorrenteSaldoNegativo() {
-        ContaCorrente contaCorrente = criarContaCorrente();
-
-        boolean saque = contaCorrente.depositar(-300);
-
-        Assertions.assertFalse(saque);
-    }
-
-
-    //CONTA POUPANÇA
-
-
-    @Test
-    public void saqueContaPoupanca() {
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-        contaPoupanca.creditarTaxa();
-
-        boolean saque = contaPoupanca.sacar(100.0);
-
-        Assertions.assertTrue(saque);
-        Assertions.assertEquals(1920.0, contaPoupanca.getSaldo());
-    }
-
-    @Test
-    public void saqueContaPoupancaSemSaldo() {
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-
-        boolean saque = contaPoupanca.sacar(3000);
-
-        Assertions.assertFalse(saque);
-    }
-
-    @Test
-    public void transferenciaContaPoupanca() {
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-        ContaPagamento contaPagamento = criarContaPagamento();
-
-        boolean transferencia = contaPoupanca.transferir(contaPagamento, 500.0);
-
-        Assertions.assertTrue(transferencia);
-        Assertions.assertEquals(1500.0, contaPoupanca.getSaldo());
-        Assertions.assertEquals(2500.0, contaPagamento.getSaldo());
-    }
-
-    @Test
-    public void transferenciaContaPoupancaSemSaldo() {
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-        ContaPagamento contaPagamento = criarContaPagamento();
-
-        boolean transferencia = contaPoupanca.transferir(contaPagamento, 5000.0);
-
-        Assertions.assertFalse(transferencia);
-    }
-
-    @Test
-    public void depositoContaPoupanca() {
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-
-        boolean saque = contaPoupanca.depositar(500);
-
-        Assertions.assertTrue(saque);
-        Assertions.assertEquals(2500.0, contaPoupanca.getSaldo());
-    }
-
-    @Test
-    public void depositoContaPoupancaSaldoNegativo() {
-        ContaPoupanca contaPoupanca = criarContaPoupanca();
-
-        boolean saque = contaPoupanca.depositar(-300);
-
-        Assertions.assertFalse(saque);
-    }
-
-
-    //CONTA PAGAMENTO
-
-
-    @Test
-    public void saqueContaPagamento() {
-        ContaPagamento contaPagamento = criarContaPagamento();
-
-        boolean saque = contaPagamento.sacar(100.0);
-
-        Assertions.assertTrue(saque);
-        Assertions.assertEquals(1895.75, contaPagamento.getSaldo());
-    }
-
-    @Test
-    public void saqueContaPagamentoSemSaldo() {
-        ContaPagamento contaPagamento = criarContaPagamento();
-
-        boolean saque = contaPagamento.sacar(3000);
-
-        Assertions.assertFalse(saque);
-    }
-
-    @Test
-    public void transferenciaContaPagamento() {
-        ContaPagamento contaPagamento = criarContaPagamento();
-        ContaCorrente contaCorrente = criarContaCorrente();
-
-        boolean transferencia = contaPagamento.transferir(contaCorrente, 500.0);
-
-        Assertions.assertTrue(transferencia);
-        Assertions.assertEquals(1500.0, contaPagamento.getSaldo());
-        Assertions.assertEquals(2500.0, contaCorrente.getSaldo());
-    }
-
-    @Test
-    public void transferenciaContaPagamentoSemSaldo() {
-        ContaPagamento contaPagamento = criarContaPagamento();
-        ContaCorrente contaCorrente = criarContaCorrente();
-
-        boolean transferencia = contaPagamento.transferir(contaCorrente, 5000.0);
-
-        Assertions.assertFalse(transferencia);
-    }
-
-    @Test
-    public void depositoContaPagamento() {
-        ContaPagamento contaPagamento = criarContaPagamento();
-
-        boolean saque = contaPagamento.depositar(500);
-
-        Assertions.assertTrue(saque);
-        Assertions.assertEquals(2500.0, contaPagamento.getSaldo());
-    }
-
-    @Test
-    public void depositoContaPagamentoSaldoNegativo() {
-        ContaPagamento contaPagamento = criarContaPagamento();
-
-        boolean saque = contaPagamento.depositar(-300);
-
-        Assertions.assertFalse(saque);
-        Assertions.assertEquals(2000.0, contaPagamento.getSaldo());
-    }
-
-    //util
-
-    public ContaCorrente criarContaCorrente(){
+    public void deveTestarSaqueContaCorrenteEVerificarSaldoComSucesso() {
+        //setup
         ContaCorrente contaCorrente = new ContaCorrente();
-        contaCorrente.setChequeEspecial(1000.0);
-        contaCorrente.setSaldo(2000.0);
-        return contaCorrente;
+        contaCorrente.setSaldo(1000.00);
+        contaCorrente.setChequeEspecial(1000.00);
+        double saque = 1500.00;
+
+        //act
+        boolean conseguiuSacar = contaCorrente.sacar(saque);
+
+
+        //assert
+        Assertions.assertTrue(conseguiuSacar);
+        Assertions.assertEquals(-500, contaCorrente.getSaldo());
     }
 
-    public ContaPoupanca criarContaPoupanca(){
+    @Test
+    public void deveTestarSaqueContaCorrenteSemSaldo() {
+        //setup
+        ContaCorrente contaCorrente = new ContaCorrente();
+        contaCorrente.setSaldo(1000.00);
+        contaCorrente.setChequeEspecial(1000.00);
+        double valorSaque = 3000.00;
+
+        //act
+        boolean conseguiuSacar = contaCorrente.sacar(valorSaque);
+
+        //assert
+        Assertions.assertFalse(conseguiuSacar);
+        Assertions.assertEquals(1000, contaCorrente.getSaldo());
+    }
+
+    @Test
+    public void deveTestarSaqueContaPoupancaEVerificarSaldoComSucesso() {
+        //setup
         ContaPoupanca contaPoupanca = new ContaPoupanca();
-        contaPoupanca.setSaldo(2000.0);
-        return contaPoupanca;
+        contaPoupanca.setSaldo(1000.00);
+        contaPoupanca.creditarTaxa();
+        double valorSaque = 900.00;
+
+        //act
+        boolean conseguiuSacar = contaPoupanca.sacar(valorSaque);
+
+        //assert
+        Assertions.assertTrue(conseguiuSacar);
+        Assertions.assertEquals(110.00, contaPoupanca.getSaldo());
     }
 
-    public ContaPagamento criarContaPagamento(){
+    @Test
+    public void deveTestarSaqueContaPoupancaSemSaldo() {
+        //setup
+        ContaPoupanca contaPoupanca = new ContaPoupanca();
+        contaPoupanca.setSaldo(1000.00);
+        double valorSaque = 1100.00 ;
+
+        //act
+        boolean conseguiuSacar = contaPoupanca.sacar(valorSaque);
+
+        //assert
+        Assertions.assertFalse(conseguiuSacar);
+        Assertions.assertEquals(1000.00, contaPoupanca.getSaldo());
+    }
+
+    @Test
+    public void deveTestarSaqueContaPagamentoEVerificarSaldoComSucesso() {
+        //setup
         ContaPagamento contaPagamento = new ContaPagamento();
-        contaPagamento.setSaldo(2000.0);
-        return contaPagamento;
+        contaPagamento.setSaldo(1000.00);
+        double valorSaque = 995.75;
+
+        //act
+        boolean conseguiuSacar = contaPagamento.sacar(valorSaque);
+
+        //assert
+        Assertions.assertTrue(conseguiuSacar);
+        Assertions.assertEquals(0.0, contaPagamento.getSaldo());
+    }
+
+    @Test
+    public void deveTestarSaqueContaPagamentoSemSaldo() {
+        //setup
+        ContaPagamento contaPagamento = new ContaPagamento();
+        contaPagamento.setSaldo(1000.00);
+        double valorSaque = 1500.00;
+
+        //act
+        boolean conseguiuSacar = contaPagamento.sacar(valorSaque);
+
+        //assert
+        Assertions.assertFalse(conseguiuSacar);
+        Assertions.assertEquals(1000.00, contaPagamento.getSaldo());
+    }
+
+    @Test
+    public void deveTestarTransferenciaEVerificarSaldoComSucesso() {
+        //setup
+        ContaPagamento contaPagamento = new ContaPagamento();
+        contaPagamento.setSaldo(1000.00);
+
+        ContaPoupanca contaPoupanca = new ContaPoupanca();
+        contaPoupanca.setSaldo(300.00);
+
+        //act
+        boolean conseguiuTransferir = contaPagamento.transferir(contaPoupanca, 500.00);
+
+        //assert
+        Assertions.assertTrue(conseguiuTransferir);
+        Assertions.assertEquals(500.00, contaPagamento.getSaldo());
+        Assertions.assertEquals(800.00, contaPoupanca.getSaldo());
+    }
+
+    @Test
+    public void deveTestarTransferenciaSemSaldo() {
+        //setup
+        ContaPagamento contaPagamento = new ContaPagamento();
+        contaPagamento.setSaldo(1000.00);
+        ContaPoupanca contaPoupanca = new ContaPoupanca();
+        contaPoupanca.setSaldo(0.0);
+        double transferencia = 1500.00;
+
+        //act
+        boolean conseguiuTransferir = contaPagamento.transferir(contaPoupanca, transferencia);
+
+        //assert
+        Assertions.assertFalse(conseguiuTransferir);
+        Assertions.assertEquals(1000.00, contaPagamento.getSaldo());
+        Assertions.assertEquals(0.0, contaPoupanca.getSaldo());
+    }
+
+    @Test
+    public void deveTestarDepositoEVerificarSaldoComSucesso() {
+        //setup
+        ContaPagamento contaPagamento = new ContaPagamento();
+        contaPagamento.setSaldo(1000.00);
+
+        double deposito = 1500.00;
+
+        //act
+        boolean conseguiuDepositar = contaPagamento.depositar(deposito);
+
+        //assert
+        Assertions.assertTrue(conseguiuDepositar);
+        Assertions.assertEquals(2500.00, contaPagamento.getSaldo());
+    }
+
+    @Test
+    public void deveTestarDepositoNegativo() {
+        //setup
+        ContaPagamento contaPagamento = new ContaPagamento();
+        contaPagamento.setSaldo(1000.00);
+        double deposito = -1500.00;
+        double depositoZerado = 0.0;
+
+        //act
+        boolean conseguiuDepositar = contaPagamento.depositar(deposito);
+        conseguiuDepositar = contaPagamento.depositar(depositoZerado);
+
+        //assert
+        Assertions.assertFalse(conseguiuDepositar);
+        Assertions.assertEquals(1000.00, contaPagamento.getSaldo());
     }
 }
