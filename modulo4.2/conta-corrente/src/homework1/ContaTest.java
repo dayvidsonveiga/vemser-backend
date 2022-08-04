@@ -78,15 +78,15 @@ public class ContaTest {
     public void deveTestarSaqueContaPagamentoEVerificarSaldoComSucesso() {
         //setup
         ContaPagamento contaPagamento = new ContaPagamento();
-        contaPagamento.setSaldo(1000.00);
-        double valorSaque = 995.75;
+        contaPagamento.setSaldo(1235.25);
+        double valorSaque = 1230;
 
         //act
         boolean conseguiuSacar = contaPagamento.sacar(valorSaque);
 
         //assert
         Assertions.assertTrue(conseguiuSacar);
-        Assertions.assertEquals(0.0, contaPagamento.getSaldo());
+        Assertions.assertEquals(1, contaPagamento.getSaldo());
     }
 
     @Test
