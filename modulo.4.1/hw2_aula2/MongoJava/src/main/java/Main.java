@@ -1,6 +1,7 @@
 import com.mongodb.Block;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 
@@ -38,6 +39,8 @@ public class Main {
         Document novoAluno5 = new Document("nome", "Carlos Eduardo")
                 .append("data_nascimento", new Date(2000, 12, 5));
 
+
+        // Insert
         List<Document> inserts = new ArrayList<>();
         inserts.add(novoAluno1);
         inserts.add(novoAluno2);
@@ -47,21 +50,28 @@ public class Main {
 
         alunos.insertMany(inserts);
 
-        //Listar aluno
+        // Update
+        alunos.updateOne(Filters.eq("nome", "Carlos Eduardo"), new Document("$set", new Document("nome", "Auxiliadora")));
+
+        // Find
         Document documents = alunos.find(new Document("nome", "Maria Luiza")).first();
         System.out.println(documents.toJson());
 
-        // agregação
+        // Agregate
         alunos.aggregate(
                 Arrays.asList(
                         match(Filters.gte("data_nascimento", new Date(2000, 1, 1))),
                         group("$nome")
                 )).forEach((Block<? super Document>) doc -> System.out.println(doc.toJson()));
 
-        //update
-        alunos.updateOne(Filters.eq("nome", "Carlos Eduardo"), new Document("$set", new Document("nome", "Auxiliadora")));
+        // Projection
+        alunos.find()
+                .projection(Projections.exclude("_id", "data_nascimento"))
+                .iterator()
+                .forEachRemaining(System.out::println);
 
-        //delete
+
+        // Delete
         Document toDelete = alunos.find(new Document("nome", "Lucas")).first();
         DeleteResult deleteResult = alunos.deleteOne(toDelete);
         System.out.println(deleteResult);
