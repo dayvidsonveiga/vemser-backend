@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35d7c4e6-f91e-45b5-a9bd-dd7c6c16747b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/config/ConfigMongoDB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/config/KafkaProducerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/config/OpenApiConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/controller/ProdutorController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/dto/VeiculoDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/service/ConsumidorService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../modulo 4.3/veiculoprodutorconsumidor/src/main/java/com/veiculoprodutorconsumidor/veiculoprodutorconsumidor/service/ProdutorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +56,7 @@
       <updated>1659706729541</updated>
       <workItem from="1659706730958" duration="130000" />
       <workItem from="1660043608538" duration="264000" />
+      <workItem from="1660070846261" duration="383000" />
     </task>
     <servers />
   </component>
